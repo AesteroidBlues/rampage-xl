@@ -46,12 +46,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="mugic\MugicPacketBuilder.cs" />
+    <Compile Include="Mugic\MugicConnection.cs" />
+    <Compile Include="Mugic\MugicObjectManager.cs" />
+    <Compile Include="Mugic\MugicPacket.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="shape\Bounds.cs" />
-    <Compile Include="shape\Drawable.cs" />
-    <Compile Include="shape\Rectangle.cs" />
+    <Compile Include="Shape\Bounds.cs" />
+    <Compile Include="Shape\Drawable.cs" />
+    <Compile Include="Shape\Rectangle.cs" />
+    <Compile Include="XLG.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -4,10 +4,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RampageXL.shape
+using RampageXL.Mugic;
+
+namespace RampageXL.Shape
 {
-	interface Drawable
+	abstract class Drawable
 	{
-		void Draw();
+		protected int objectId;
+		private bool wasCreated = false;
+
+		public abstract void Draw();
+
+		protected void InitPacket(MugicCommand s, MugicPacket p)
+		{
+			if (!wasCreated)
+			{
+				objectId = MugicObjectManager.NextId;
+				p.Command(s, objectId);
+				wasCreated = true;
+			}
+			else
+			{
+				p.Command(MugicCommand.Update, objectId);
+			}
+		}
 	}
 }

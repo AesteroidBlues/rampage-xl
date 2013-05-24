@@ -8,13 +8,16 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
-namespace RampageXL.shape
+using RampageXL.Mugic;
+
+namespace RampageXL.Shape
 {
 	class Rectangle : Drawable
 	{
 		private Bounds bounds;
 		private Vector3 position;
 		private Color4 color;
+		private bool wasCreated = false;
 
 		public Rectangle(int x, int y, int w, int h)
 		{
@@ -46,18 +49,30 @@ namespace RampageXL.shape
 			return this;
 		}
 
-		public void Draw() 
+		public override void Draw() 
 		{
-			GL.FrontFace(FrontFaceDirection.Cw);
 			GL.Begin(BeginMode.TriangleStrip);
 			GL.Color4(color);
 
-			GL.Vertex2(position.X - bounds.halfWidth, position.Y + bounds.halfHeight);
-			GL.Vertex2(position.X - bounds.halfWidth, position.Y - bounds.halfHeight);
-			GL.Vertex2(position.X + bounds.halfWidth, position.Y + bounds.halfHeight);
-			GL.Vertex2(position.X + bounds.halfWidth, position.Y - bounds.halfHeight);
+			GL.Vertex2(position.X - bounds.halfWidth, position.Y + bounds.halfHeight); // LL  2---4
+			GL.Vertex2(position.X - bounds.halfWidth, position.Y - bounds.halfHeight); // UL  | \ |
+			GL.Vertex2(position.X + bounds.halfWidth, position.Y + bounds.halfHeight); // LR  |  \|
+			GL.Vertex2(position.X + bounds.halfWidth, position.Y - bounds.halfHeight); // UR  1---3 
 
 			GL.End();
+		}
+
+		public void Send()
+		{
+			MugicPacket packet = new MugicPacket();
+			base.InitPacket(MugicCommand.Rectangle, packet);
+
+			packet.Parameter(MugicParam.X, position.X);
+			packet.Parameter(MugicParam.Y, position.Y);
+			packet.Parameter(MugicParam.Z, position.Z);
+
+			packet.Parameter(MugicParam.Width, bounds.width);
+			packet.Parameter(MugicParam.Height, bounds.height);
 		}
 	}
 }
