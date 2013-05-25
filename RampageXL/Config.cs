@@ -20,6 +20,10 @@ namespace RampageXL
 		public static GraphicsMode GraphicsMode = GraphicsMode.Default;
 		public static String Title              = "Rampage XL";
 
-
+		//////////////////////////////
+		/// NETWORK PROPERTIES
+		//////////////////////////////
+		public static String CalVRIP			= "67.58.41.6";
+		public static int CalVRPort				= 19997;
 	};
 }

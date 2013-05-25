@@ -9,6 +9,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
 using RampageXL.Shape;
+using RampageXL.Mugic;
 
 namespace RampageXL
 {
@@ -24,6 +25,8 @@ namespace RampageXL
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
+			
+			MugicConnection.Connect(Config.CalVRIP);
 
 			XLG.Init();
 		}
