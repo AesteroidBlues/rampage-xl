@@ -17,40 +17,39 @@ namespace RampageXL.Shape
 		private Bounds bounds;
 		private Vector3 position;
 		private Color4 color;
-		private bool wasCreated = false;
 
-		public Rectangle(int x, int y, int w, int h)
-		{
-			bounds = new Bounds(w, h);
-			position = new Vector3(x, y, 0);
-		}
+		public Rectangle(float x, float y, int w, int h) : this(x, y, 0, w, h) { }
 
-		public Rectangle(int x, int y, int z, int w, int h)
-		{
+		public Rectangle(float x, float y, int z, int w, int h) {
 			bounds = new Bounds(w, h);
 			position = new Vector3(x, y, z);
 		}
 
-		public Rectangle setColor(byte r, byte g, byte b)
-		{
-			color = new Color4(r, g, b, 255);
-			return this;
+		public Rectangle setColor(byte r, byte g, byte b) {
+			return setColor(r, g, b, 255);
 		}
 
-		public Rectangle setColor(byte r, byte g, byte b, byte a)
-		{
+		public Rectangle setColor(byte r, byte g, byte b, byte a) {
 			color = new Color4(r, g, b, a);
 			return this;
 		}
 
-		public Rectangle setColor(Color4 c)
-		{
+		public Rectangle setColor(Color4 c) {
 			color = c;
 			return this;
 		}
 
-		public override void Draw() 
-		{
+		public Rectangle setPosition(float x, float y) {
+			return setPosition(new Vector2(x, y));
+		}
+
+		public Rectangle setPosition(Vector2 p) {
+			position.X = p.X;
+			position.Y = p.Y;
+			return this;
+		}
+
+		public override void Draw()  {
 			GL.Begin(BeginMode.TriangleStrip);
 			GL.Color4(color);
 
@@ -62,8 +61,7 @@ namespace RampageXL.Shape
 			GL.End();
 		}
 
-		public void Send()
-		{
+		public void Send() {
 			MugicPacket packet = new MugicPacket();
 			base.InitPacket(MugicCommand.Rectangle, packet);
 
