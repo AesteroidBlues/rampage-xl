@@ -12,10 +12,14 @@ using RampageXL.Shape;
 
 namespace RampageXL.Entity
 {
-	class Player
+	class Player : GameObject
 	{
+        readonly int PLAYER_WIDTH = 64;
+        readonly int PLAYER_HEIGHT = 64;
+
 		Vector2 pos;
 		Rectangle rect;
+        Bounds bounds;
 
 		private bool moveLeft;
 		private bool moveRight;
@@ -24,8 +28,12 @@ namespace RampageXL.Entity
 		public Player(int x, int y) : this(new Vector2(x, y)) {}
 		public Player(Vector2 p) {
 			pos = p;
-			rect = new Rectangle(p.X, p.Y, 64, 64);
+			rect = new Rectangle(p.X, p.Y, PLAYER_WIDTH, PLAYER_HEIGHT);
 			rect.setColor(200, 50, 50);
+
+            bounds = new Bounds(PLAYER_WIDTH, PLAYER_HEIGHT);
+
+            boundingBox = new BoundingBox(p.X, p.Y, bounds);
 
 			XLG.keyboard.KeyDown += new EventHandler<KeyboardKeyEventArgs>(OnKeyDown);
 			XLG.keyboard.KeyUp += new EventHandler<KeyboardKeyEventArgs>(OnKeyUp);
