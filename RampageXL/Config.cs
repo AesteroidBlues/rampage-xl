@@ -25,5 +25,6 @@ namespace RampageXL
 		//////////////////////////////
 		public static String CalVRIP			= "67.58.41.6";
 		public static int CalVRPort				= 19997;
+		public static int Max_Packet_Size		= 1024;
 	};
 }

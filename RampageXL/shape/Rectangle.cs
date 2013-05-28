@@ -18,11 +18,14 @@ namespace RampageXL.Shape
 		private Vector3 position;
 		private Color4 color;
 
+		private bool dirty = false;
+
 		public Rectangle(float x, float y, int w, int h) : this(x, y, 0, w, h) { }
 
 		public Rectangle(float x, float y, int z, int w, int h) {
 			bounds = new Bounds(w, h);
 			position = new Vector3(x, y, z);
+			MugicObjectManager.Register(this);
 		}
 
 		public Rectangle setColor(byte r, byte g, byte b) {
@@ -30,12 +33,13 @@ namespace RampageXL.Shape
 		}
 
 		public Rectangle setColor(byte r, byte g, byte b, byte a) {
-			color = new Color4(r, g, b, a);
-			return this;
+			return setColor(new Color4(r, g, b, a));
 		}
 
 		public Rectangle setColor(Color4 c) {
+			dirty = true;
 			color = c;
+
 			return this;
 		}
 
@@ -44,8 +48,10 @@ namespace RampageXL.Shape
 		}
 
 		public Rectangle setPosition(Vector2 p) {
+			dirty = true;
 			position.X = p.X;
 			position.Y = p.Y;
+
 			return this;
 		}
 
@@ -61,16 +67,23 @@ namespace RampageXL.Shape
 			GL.End();
 		}
 
-		public void Send() {
+		public override MugicPacket GetUpdate() {
+			if(!dirty) return null;
+
 			MugicPacket packet = new MugicPacket();
+
 			base.InitPacket(MugicCommand.Rectangle, packet);
 
-			packet.Parameter(MugicParam.X, position.X);
-			packet.Parameter(MugicParam.Y, position.Y);
-			packet.Parameter(MugicParam.Z, position.Z);
+			packet.Parameter(MugicParam.X, position.X * Config.WallScalar);
+			packet.Parameter(MugicParam.Y, position.Y * Config.WallScalar);
+			packet.Parameter(MugicParam.Z, position.Z * Config.WallScalar);
 
-			packet.Parameter(MugicParam.Width, bounds.width);
-			packet.Parameter(MugicParam.Height, bounds.height);
+			packet.Parameter(MugicParam.Width, bounds.width * Config.WallScalar);
+			packet.Parameter(MugicParam.Height, bounds.height * Config.WallScalar);
+
+			dirty = false;
+
+			return packet;
 		}
 	}
 }

@@ -36,12 +36,20 @@ namespace RampageXL
 			XLG.Init();
 		}
 
+		protected override void OnUpdateFrame(FrameEventArgs e)
+		{
+			base.OnUpdateFrame(e);
+
+			MugicObjectManager.SendShapes();
+
+			p.Update();
+		}
+
 		protected override void OnRenderFrame(FrameEventArgs e)
 		{
 			base.OnRenderFrame(e);
 
 			XLG.RenderFrame();
-			p.Update();
 			p.Draw();
 
 			SwapBuffers();

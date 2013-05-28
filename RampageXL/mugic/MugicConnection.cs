@@ -12,6 +12,7 @@ namespace RampageXL.Mugic
 	class MugicConnection
 	{
 		private static Socket sock;
+		protected static Queue<MugicPacket> outgoing;
 
 		public static bool Connect(String ip)
 		{
@@ -26,18 +27,68 @@ namespace RampageXL.Mugic
 			{
 				sock.Connect(server);
 			}
-			catch (ThreadStateException)
+			catch (Exception)
 			{
 				Console.Write("Something went wrong while connecting");
 				return false;
 			}
 			Console.Write("Connection success\n");
 
-			String text = "circle butt radius=1000 b1=0.1 b2=0.01 g1=0.1 g2=0.01 cx=500";
-			byte[] encoded = Encoding.ASCII.GetBytes(text);
-			sock.Send(encoded);
+			outgoing = new Queue<MugicPacket>();
 
 			return true;
+		}
+
+		public static void EnueuePacket(MugicPacket p)
+		{
+			outgoing.Enqueue(p);
+		}
+
+
+		public static void SendUpdate()
+		{
+			if (outgoing.Count > 0)
+			{
+				Thread uThread = new Thread(new ThreadStart(SendThreadedUpdate));
+				uThread.Start();
+			}
+		}
+
+		private static void SendThreadedUpdate()
+		{
+			List<string> packets = new List<string>();
+			int size = 0;
+			string currentPacket = "";
+			while (outgoing.Count > 0)
+			{
+				MugicPacket p = outgoing.Dequeue();
+				string packet = p.ToString();
+
+				int tempSize = size;
+				tempSize += packet.Length;
+
+				if (tempSize < Config.Max_Packet_Size)
+				{
+					currentPacket += packet;
+					size += packet.Length;
+				}
+				else
+				{
+					packets.Add(currentPacket);
+					currentPacket = "";
+					size = 0;
+					currentPacket += packet;
+				}
+			}
+			// Add any remainder
+			packets.Add(currentPacket);
+
+			foreach (String packet in packets)
+			{
+				byte[] encoded = Encoding.ASCII.GetBytes(packet);
+				Console.Write(packet+"\n");
+				sock.Send(encoded);
+			}
 		}
 	}
 }

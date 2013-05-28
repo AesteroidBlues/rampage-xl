@@ -45,9 +45,10 @@ namespace RampageXL.Mugic
 			string ret = "";
 			
 			ret += Command2String(command);
+			ret += " " + objectId;
 			foreach (Param p in parameters)
 			{
-				ret += p.ToString();
+				ret += " " + p.ToString();
 			}
 
 			ret += ";";
@@ -77,11 +78,11 @@ namespace RampageXL.Mugic
 		{
 			switch (c)
 			{
-				case MugicCommand.Rectangle: return "rectangle ";
-				case MugicCommand.Circle   : return "circle ";
-				case MugicCommand.Line     : return "line ";
-				case MugicCommand.Update   : return "update ";
-				default                    : return "ERROR ";
+				case MugicCommand.Rectangle: return "rectangle";
+				case MugicCommand.Circle   : return "circle";
+				case MugicCommand.Line     : return "line";
+				case MugicCommand.Update   : return "update";
+				default                    : return "ERROR";
 			}
 		}
 

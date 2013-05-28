@@ -14,6 +14,7 @@ namespace RampageXL.Shape
 		private bool wasCreated = false;
 
 		public abstract void Draw();
+		public abstract MugicPacket GetUpdate();
 
 		protected void InitPacket(MugicCommand s, MugicPacket p)
 		{

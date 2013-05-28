@@ -54,7 +54,8 @@ namespace RampageXL.Entity
 			if (moveLeft) { pos.X -= 1; }
 			if (moveRight) { pos.X += 1; }
 
-			rect.setPosition(pos);
+			if(moveLeft || moveRight)
+				rect.setPosition(pos);
 		}
 
 		public void Draw()
