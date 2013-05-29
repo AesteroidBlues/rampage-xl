@@ -24,10 +24,36 @@ namespace RampageXL.Entity
 
         public bool isColliding(BoundingBox other)
         {
-            if ((other.x > this.x) &&
-                (other.x < (this.x + bounds.width)) &&
-                (other.y > this.y) &&
-                (other.y < (this.y + bounds.height)))
+            float otherLeftEdge = other.x;
+            float otherRightEdge = other.x + other.bounds.width;
+            float otherTopEdge = other.y + other.bounds.height;
+            float otherBottomEdge = other.y;
+
+            float leftEdge = x;
+            float rightEdge = x + bounds.width;
+            float topEdge =  y + bounds.height;
+            float bottomEdge = y;
+
+            bool left = (otherLeftEdge >= leftEdge) && (otherLeftEdge <= (rightEdge));
+            bool right = (otherRightEdge > leftEdge) && (otherRightEdge <= (rightEdge));
+            bool top = (otherTopEdge >= bottomEdge) && (otherTopEdge < topEdge) ;
+            bool bot = (otherBottomEdge >= bottomEdge) && (otherBottomEdge < topEdge);
+            bool insideX = (otherLeftEdge < leftEdge) && (otherRightEdge > rightEdge);
+            bool insideY = (otherTopEdge < topEdge) && (otherBottomEdge > bottomEdge);
+            bool surroundOtherX = (otherLeftEdge > leftEdge) && (otherRightEdge < rightEdge);
+            bool surroundOtherY = (otherTopEdge > topEdge) && (otherBottomEdge < bottomEdge);
+
+            if (
+                    (left && top)
+                    ||
+                    (left && bot)
+                    ||
+                    (right && top)
+                    ||
+                    (right && bot)
+                    ||
+                    insideX || insideY || surroundOtherX || surroundOtherY
+               )
             {
                 return true;
             }
@@ -35,6 +61,12 @@ namespace RampageXL.Entity
             {
                 return false;
             }
+        }
+
+        public void setPosition(Vector2 pos)
+        {
+            this.x = pos.X;
+            this.y = pos.Y;
         }
     }
 }

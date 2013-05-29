@@ -16,7 +16,8 @@ namespace RampageXL
 {
 	class Game : GameWindow
 	{
-		
+        List<Building> buildings;
+
 		Player p;
 
 		public Game()
@@ -33,6 +34,11 @@ namespace RampageXL
 			MugicConnection.Connect(Config.CalVRIP);
 			p = new Player(90, 90);
 
+            buildings = new List<Building>();
+
+            buildings.Add(new Building(new Vector2(90, 90), new Bounds(40, 120)));
+            buildings.Add(new Building(new Vector2(1000, 90), new Bounds(50, 90)));
+
 			XLG.Init();
 		}
 
@@ -43,6 +49,15 @@ namespace RampageXL
 			MugicObjectManager.SendShapes();
 
 			p.Update();
+
+            //Collision checking
+            foreach (Building b in buildings)
+            {
+                if (b.isColliding(p))
+                {
+                    Console.Write("\nLOOK OUT JC A COLLISION (with " + b.ToString() + ")!\n");
+                }
+            }
 		}
 
 		protected override void OnRenderFrame(FrameEventArgs e)
@@ -51,6 +66,10 @@ namespace RampageXL
 
 			XLG.RenderFrame();
 			p.Draw();
+            foreach (Building b in buildings)
+            {
+                b.Draw();
+            }
 
 			SwapBuffers();
 		}

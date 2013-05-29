@@ -18,7 +18,6 @@ namespace RampageXL.Entity
         readonly int PLAYER_HEIGHT = 64;
 
 		Vector2 pos;
-		Rectangle rect;
         Bounds bounds;
 
 		private bool moveLeft;
@@ -28,8 +27,8 @@ namespace RampageXL.Entity
 		public Player(int x, int y) : this(new Vector2(x, y)) {}
 		public Player(Vector2 p) {
 			pos = p;
-			rect = new Rectangle(p.X, p.Y, PLAYER_WIDTH, PLAYER_HEIGHT);
-			rect.setColor(200, 50, 50);
+			rectangle = new Rectangle(p.X, p.Y, PLAYER_WIDTH, PLAYER_HEIGHT);
+			rectangle.setColor(200, 50, 50);
 
             bounds = new Bounds(PLAYER_WIDTH, PLAYER_HEIGHT);
 
@@ -62,13 +61,17 @@ namespace RampageXL.Entity
 			if (moveLeft) { pos.X -= 1; }
 			if (moveRight) { pos.X += 1; }
 
-			if(moveLeft || moveRight)
-				rect.setPosition(pos);
+            if (moveLeft || moveRight)
+            {
+                rectangle.setPosition(pos);
+                boundingBox.setPosition(pos);
+            }
+
 		}
 
-		public void Draw()
+		public override void Draw()
 		{
-			rect.Draw();
+			rectangle.Draw();
 		}
 	}
 }
