@@ -9,64 +9,46 @@ using RampageXL.Shape;
 
 namespace RampageXL.Entity
 {
-    class BoundingBox
-    {
-        private float x;
-        private float y;
-        private Bounds bounds;
+	class BoundingBox
+	{
+		private float x;
+		private float y;
+		private Bounds bounds;
 
-        public BoundingBox(float x, float y, Bounds bounds)
-        {
-            this.x      = x;
-            this.y      = y;
-            this.bounds = bounds;
-        }
+		public BoundingBox(float x, float y, Bounds bounds)
+		{
+			this.x      = x;
+			this.y      = y;
+			this.bounds = bounds;
+		}
 
-        public bool isColliding(BoundingBox other)
-        {
-            float otherLeftEdge = other.x;
-            float otherRightEdge = other.x + other.bounds.width;
-            float otherTopEdge = other.y + other.bounds.height;
-            float otherBottomEdge = other.y;
+		public bool isColliding(BoundingBox other)
+		{
+			float myLeft = x - bounds.halfWidth;
+			float myRight = x + bounds.halfWidth;
+			float myTop = y - bounds.halfHeight;
+			float myBottom = y + bounds.halfHeight;
 
-            float leftEdge = x;
-            float rightEdge = x + bounds.width;
-            float topEdge =  y + bounds.height;
-            float bottomEdge = y;
+			float theirLeft = other.x - other.bounds.halfWidth;
+			float theirRight = other.x + other.bounds.halfWidth;
+			float theirTop = other.y - other.bounds.halfHeight;
+			float theirBottom = other.y + other.bounds.halfHeight;
 
-            bool left = (otherLeftEdge >= leftEdge) && (otherLeftEdge <= (rightEdge));
-            bool right = (otherRightEdge > leftEdge) && (otherRightEdge <= (rightEdge));
-            bool top = (otherTopEdge >= bottomEdge) && (otherTopEdge < topEdge) ;
-            bool bot = (otherBottomEdge >= bottomEdge) && (otherBottomEdge < topEdge);
-            bool insideX = (otherLeftEdge < leftEdge) && (otherRightEdge > rightEdge);
-            bool insideY = (otherTopEdge < topEdge) && (otherBottomEdge > bottomEdge);
-            bool surroundOtherX = (otherLeftEdge > leftEdge) && (otherRightEdge < rightEdge);
-            bool surroundOtherY = (otherTopEdge > topEdge) && (otherBottomEdge < bottomEdge);
+			if (myLeft > theirRight ||
+				myRight < theirLeft ||
+				myTop > theirBottom ||
+				myBottom < theirTop)
+			{
+				return false;
+			}
 
-            if (
-                    (left && top)
-                    ||
-                    (left && bot)
-                    ||
-                    (right && top)
-                    ||
-                    (right && bot)
-                    ||
-                    insideX || insideY || surroundOtherX || surroundOtherY
-               )
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+			return true;
+		}
 
-        public void setPosition(Vector2 pos)
-        {
-            this.x = pos.X;
-            this.y = pos.Y;
-        }
-    }
+		public void setPosition(Vector2 pos)
+		{
+			this.x = pos.X;
+			this.y = pos.Y;
+		}
+	}
 }

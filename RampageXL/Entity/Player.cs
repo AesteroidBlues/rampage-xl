@@ -14,11 +14,11 @@ namespace RampageXL.Entity
 {
 	class Player : GameObject
 	{
-        readonly int PLAYER_WIDTH = 64;
-        readonly int PLAYER_HEIGHT = 64;
+		readonly int PLAYER_WIDTH = 64;
+		readonly int PLAYER_HEIGHT = 64;
 
 		Vector2 pos;
-        Bounds bounds;
+		Bounds bounds;
 
 		private bool moveLeft;
 		private bool moveRight;
@@ -30,9 +30,9 @@ namespace RampageXL.Entity
 			rectangle = new Rectangle(p.X, p.Y, PLAYER_WIDTH, PLAYER_HEIGHT);
 			rectangle.setColor(200, 50, 50);
 
-            bounds = new Bounds(PLAYER_WIDTH, PLAYER_HEIGHT);
+			bounds = new Bounds(PLAYER_WIDTH, PLAYER_HEIGHT);
 
-            boundingBox = new BoundingBox(p.X, p.Y, bounds);
+			boundingBox = new BoundingBox(p.X, p.Y, bounds);
 
 			XLG.keyboard.KeyDown += new EventHandler<KeyboardKeyEventArgs>(OnKeyDown);
 			XLG.keyboard.KeyUp += new EventHandler<KeyboardKeyEventArgs>(OnKeyUp);
@@ -61,11 +61,11 @@ namespace RampageXL.Entity
 			if (moveLeft) { pos.X -= 1; }
 			if (moveRight) { pos.X += 1; }
 
-            if (moveLeft || moveRight)
-            {
-                rectangle.setPosition(pos);
-                boundingBox.setPosition(pos);
-            }
+			if (moveLeft || moveRight)
+			{
+				rectangle.setPosition(pos);
+				boundingBox.setPosition(pos);
+			}
 
 		}
 
