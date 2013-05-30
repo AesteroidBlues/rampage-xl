@@ -17,6 +17,7 @@ namespace RampageXL.Shape
 		private Bounds bounds;
 		private Vector3 position;
 		private Color4 color;
+		private Image image;
 
 		private bool dirty = false;
 
@@ -29,7 +30,7 @@ namespace RampageXL.Shape
 		}
 
 		public Rectangle setColor(byte r, byte g, byte b) {
-			return setColor(r, g, b, 255);
+			return setColor(new Color4(r, g, b, 255));
 		}
 
 		public Rectangle setColor(byte r, byte g, byte b, byte a) {
@@ -55,16 +56,29 @@ namespace RampageXL.Shape
 			return this;
 		}
 
+		public Rectangle setTexture(string path)
+		{
+			image = new Image(path);
+			return this;
+		}
+
 		public override void Draw()  {
-			GL.Begin(BeginMode.TriangleStrip);
-			GL.Color4(color);
+			if (image != null)
+			{
+				image.Draw(position, bounds);
+			}
+			else
+			{
+				GL.Begin(BeginMode.TriangleStrip);
+				GL.Color4(color);
 
-			GL.Vertex2(position.X - bounds.halfWidth, position.Y + bounds.halfHeight); // LL  2---4
-			GL.Vertex2(position.X - bounds.halfWidth, position.Y - bounds.halfHeight); // UL  | \ |
-			GL.Vertex2(position.X + bounds.halfWidth, position.Y + bounds.halfHeight); // LR  |  \|
-			GL.Vertex2(position.X + bounds.halfWidth, position.Y - bounds.halfHeight); // UR  1---3 
+				GL.Vertex2(position.X - bounds.halfWidth, position.Y + bounds.halfHeight); // LL  2---4
+				GL.Vertex2(position.X - bounds.halfWidth, position.Y - bounds.halfHeight); // UL  | \ |
+				GL.Vertex2(position.X + bounds.halfWidth, position.Y + bounds.halfHeight); // LR  |  \|
+				GL.Vertex2(position.X + bounds.halfWidth, position.Y - bounds.halfHeight); // UR  1---3 
 
-			GL.End();
+				GL.End();
+			}
 		}
 
 		public override MugicPacket GetUpdate() {
