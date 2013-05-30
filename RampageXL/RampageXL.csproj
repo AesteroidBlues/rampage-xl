@@ -60,6 +60,7 @@
     <Compile Include="Shape\Bounds.cs" />
     <Compile Include="Shape\Drawable.cs" />
     <Compile Include="Shape\Rectangle.cs" />
+    <Compile Include="TexLib.cs" />
     <Compile Include="XLG.cs" />
   </ItemGroup>
   <ItemGroup>

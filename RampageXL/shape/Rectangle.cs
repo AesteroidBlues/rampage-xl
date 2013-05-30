@@ -72,9 +72,13 @@ namespace RampageXL.Shape
 				GL.Begin(BeginMode.TriangleStrip);
 				GL.Color4(color);
 
+				GL.TexCoord2(0.0, 1.0);
 				GL.Vertex2(position.X - bounds.halfWidth, position.Y + bounds.halfHeight); // LL  2---4
+				GL.TexCoord2(0.0, 0.0);
 				GL.Vertex2(position.X - bounds.halfWidth, position.Y - bounds.halfHeight); // UL  | \ |
+				GL.TexCoord2(1.0, 1.0);
 				GL.Vertex2(position.X + bounds.halfWidth, position.Y + bounds.halfHeight); // LR  |  \|
+				GL.TexCoord2(1.0, 0.0);
 				GL.Vertex2(position.X + bounds.halfWidth, position.Y - bounds.halfHeight); // UR  1---3 
 
 				GL.End();

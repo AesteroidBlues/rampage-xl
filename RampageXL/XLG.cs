@@ -9,6 +9,8 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 
+using TexLib;
+
 namespace RampageXL
 {
 	class XLG
@@ -35,6 +37,8 @@ namespace RampageXL
 			GL.Enable(EnableCap.Blend);
 			GL.Enable(EnableCap.Texture2D);
 			GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+
+			TexLib.TexUtil.InitTexturing();
 		}
 
 		public static void RenderFrame()

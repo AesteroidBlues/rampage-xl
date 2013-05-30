@@ -17,7 +17,7 @@ namespace RampageXL.Entity
             this.boundingBox = new BoundingBox(pos.X, pos.Y, bounds);
             this.rectangle = new Rectangle(pos.X, pos.Y, bounds.width, bounds.height);
 
-            rectangle.setColor(100, 110, 100);
+            rectangle.setColor(255, 0, 255);
         }
 
         public override void Draw()

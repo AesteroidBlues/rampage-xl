@@ -28,7 +28,7 @@ namespace RampageXL.Entity
 		public Player(Vector2 p) {
 			pos = p;
 			rectangle = new Rectangle(p.X, p.Y, PLAYER_WIDTH, PLAYER_HEIGHT);
-			rectangle.setColor(200, 50, 50);
+			rectangle.setTexture("../../res/tex/george.png");
 
 			bounds = new Bounds(PLAYER_WIDTH, PLAYER_HEIGHT);
 
