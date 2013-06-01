@@ -13,7 +13,7 @@ namespace RampageXL.Entity
 {
     /// <summary>
     /// An interface for any object which can be directly interacted with by the player
-    /// Object must support collisions
+    /// Object must support collisions and must define an update function
     /// </summary>
     abstract class GameObject
     {
@@ -28,5 +28,6 @@ namespace RampageXL.Entity
         }
 
         public abstract void Draw();
+        public abstract void Update();
     }
 }

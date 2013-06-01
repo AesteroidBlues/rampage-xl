@@ -51,6 +51,7 @@
     <Compile Include="Config.cs" />
     <Compile Include="Entity\BoundingBox.cs" />
     <Compile Include="Entity\Building.cs" />
+    <Compile Include="Entity\Punch.cs" />
     <Compile Include="Entity\GameObject.cs" />
     <Compile Include="Entity\Player.cs" />
     <Compile Include="Game.cs" />

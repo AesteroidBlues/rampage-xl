@@ -51,6 +51,7 @@ namespace RampageXL
 			p.Update();
 
 			//Collision checking
+            List<Building> buildingsToRemove = new List<Building>();
 			foreach (Building b in buildings)
 			{
                 b.Update();
@@ -58,7 +59,15 @@ namespace RampageXL
 				{
 					Console.Write("\nLOOK OUT JC A COLLISION (with " + b.ToString() + ")!\n");
 				}
+                if (p.currentPunch != null && b.isColliding(p.currentPunch))
+                {
+                    buildingsToRemove.Add(b);
+                }
 			}
+            foreach (Building b in buildingsToRemove)
+            {
+                buildings.Remove(b);
+            }
 		}
 
 		protected override void OnRenderFrame(FrameEventArgs e)

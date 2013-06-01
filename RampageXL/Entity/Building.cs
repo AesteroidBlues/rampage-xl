@@ -48,7 +48,7 @@ namespace RampageXL.Entity
             rectangle.setColor(255, 0, 255);
         }
 
-        public void Update()
+        public override void Update()
         {
             currentAnim.Update();
         }

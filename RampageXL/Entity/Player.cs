@@ -22,6 +22,7 @@ namespace RampageXL.Entity
         private Animation walkingLAnim;
         private Animation walkingRAnim;
 
+        public Punch currentPunch;
 
 		readonly int PLAYER_WIDTH = 64;
 		readonly int PLAYER_HEIGHT = 64;
@@ -31,6 +32,7 @@ namespace RampageXL.Entity
 
 		private bool moveLeft;
 		private bool moveRight;
+        private bool punching;
 
         private int facing;
 
@@ -38,8 +40,8 @@ namespace RampageXL.Entity
 		public Player(int x, int y) : this(new Vector2(x, y)) {}
 		public Player(Vector2 p) {
 			pos = p;
-			rectangle = new Rectangle(p.X, p.Y, PLAYER_WIDTH, PLAYER_HEIGHT);
-			rectangle.setTexture("../../res/tex/george.png");
+            //rectangle = new Rectangle(p.X, p.Y, PLAYER_WIDTH, PLAYER_HEIGHT);
+            //rectangle.setTexture("../../res/tex/george.png");
 
 			bounds = new Bounds(PLAYER_WIDTH, PLAYER_HEIGHT);
 
@@ -94,8 +96,10 @@ namespace RampageXL.Entity
 		{
 			if (e.Key == Key.A) {
 				moveLeft = true;
-			} if (e.Key == Key.D) {
-				moveRight = true;
+            } if (e.Key == Key.D) {
+                moveRight = true;
+            } if (e.Key == Key.Space) {
+                punching = true;
 			}
 		}
 
@@ -105,11 +109,17 @@ namespace RampageXL.Entity
 				moveLeft = false;
 			} if (e.Key == Key.D) {
 				moveRight = false;
-			}
+            } if (e.Key == Key.Space) {
+                punching = false;
+            }
 		}
 
-		public void Update()
+		public override void Update()
 		{
+            if (punching)
+            {
+                currentPunch = new Punch(pos.X + (int) (facing * 30), pos.Y);
+            }
 			if (moveLeft) 
             { 
                 pos.X -= 1;
@@ -125,7 +135,6 @@ namespace RampageXL.Entity
 
 			if (moveLeft || moveRight)
 			{
-				rectangle.setPosition(pos);
 				boundingBox.setPosition(pos);
 			}
 
@@ -146,6 +155,8 @@ namespace RampageXL.Entity
 
 		public override void Draw()
 		{
+            if (currentPunch != null)
+                currentPunch.Draw();
             //rectangle.Draw();
             currentAnim.Draw(pos);
 		}
