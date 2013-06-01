@@ -32,12 +32,12 @@ namespace RampageXL
 
 			XLG.keyboard = this.Keyboard;
 			MugicConnection.Connect(Config.CalVRIP);
-			p = new Player(90, 90);
+			p = new Player(400, 300);
 
 			buildings = new List<Building>();
 
-			buildings.Add(new Building(new Vector2(90, 90), new Bounds(40, 120)));
-			buildings.Add(new Building(new Vector2(1000, 90), new Bounds(50, 90)));
+			buildings.Add(new Building(new Vector2(90, 180), new Bounds(250, 300)));
+			buildings.Add(new Building(new Vector2(1000, 180), new Bounds(250, 300)));
 
 			XLG.Init();
 		}
@@ -53,6 +53,7 @@ namespace RampageXL
 			//Collision checking
 			foreach (Building b in buildings)
 			{
+                b.Update();
 				if (b.isColliding(p))
 				{
 					Console.Write("\nLOOK OUT JC A COLLISION (with " + b.ToString() + ")!\n");
@@ -65,11 +66,11 @@ namespace RampageXL
 			base.OnRenderFrame(e);
 
 			XLG.RenderFrame();
-			p.Draw();
 			foreach (Building b in buildings)
 			{
 				b.Draw();
 			}
+            p.Draw();
 
 			SwapBuffers();
 		}

@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnimationPackage\Animation.cs" />
+    <Compile Include="AnimationPackage\FrameUpdate.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Entity\BoundingBox.cs" />
     <Compile Include="Entity\Building.cs" />
