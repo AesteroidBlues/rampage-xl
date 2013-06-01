@@ -64,6 +64,7 @@
     <Compile Include="Shape\Drawable.cs" />
     <Compile Include="Shape\Rectangle.cs" />
     <Compile Include="TexLib.cs" />
+    <Compile Include="Timing\Timer.cs" />
     <Compile Include="XLG.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -12,6 +12,8 @@ namespace RampageXL.Entity
 {
     class Building : GameObject
     {
+        public int health {get; set;}
+
         private Animation currentAnim;
 
         private Animation standingAnim;
@@ -23,7 +25,7 @@ namespace RampageXL.Entity
 
         public Building(Vector2 pos, Bounds bounds)
         {
-
+            health = 5;
 
             this.pos = pos;
             this.boundingBox = new BoundingBox(pos.X, pos.Y, bounds);

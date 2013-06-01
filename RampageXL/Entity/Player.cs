@@ -10,13 +10,13 @@ using OpenTK.Input;
 
 using RampageXL.Shape;
 using RampageXL.AnimationPackage;
+using RampageXL.Timing;
 
 namespace RampageXL.Entity
 {
 	class Player : GameObject
 	{
         private Animation currentAnim;
-
         private Animation standingLAnim;
         private Animation standingRAnim;
         private Animation walkingLAnim;
@@ -36,6 +36,10 @@ namespace RampageXL.Entity
 
         private int facing;
 
+        private List<Timer> timers;
+        private Timer punchCooldown;
+        private Timer punchLength;
+
 		public Player() : this(0, 0) {}
 		public Player(int x, int y) : this(new Vector2(x, y)) {}
 		public Player(Vector2 p) {
@@ -49,6 +53,16 @@ namespace RampageXL.Entity
 
 			XLG.keyboard.KeyDown += new EventHandler<KeyboardKeyEventArgs>(OnKeyDown);
 			XLG.keyboard.KeyUp += new EventHandler<KeyboardKeyEventArgs>(OnKeyUp);
+
+            facing = -1;
+
+            /// TIMER INIT
+            timers  = new List<Timer>();
+            punchCooldown = new Timer(40);
+            punchLength = new Timer(2);
+
+            timers.Add(punchCooldown);
+            timers.Add(punchLength);
 
             /// ANIM INIT
             Rectangle standingL000 = new Rectangle(pos.X, pos.Y, bounds.width, bounds.height);
@@ -88,8 +102,6 @@ namespace RampageXL.Entity
             walkingRAnim = new Animation(walkingRFrames, 8, AnimationMode.LOOP, LoopMode.PINGPONG);
 
             currentAnim = standingLAnim;
-
-            facing = -1;
 		}
 
 		public void OnKeyDown(Object sender, KeyboardKeyEventArgs e)
@@ -98,8 +110,10 @@ namespace RampageXL.Entity
 				moveLeft = true;
             } if (e.Key == Key.D) {
                 moveRight = true;
-            } if (e.Key == Key.Space) {
+            } if (e.Key == Key.Space && punchCooldown.timeIsUp()) {
                 punching = true;
+                punchCooldown.startTimer();
+                punchLength.startTimer();
 			}
 		}
 
@@ -119,6 +133,7 @@ namespace RampageXL.Entity
             if (punching)
             {
                 currentPunch = new Punch(pos.X + (int) (facing * 30), pos.Y);
+                punching = false;
             }
 			if (moveLeft) 
             { 
@@ -149,16 +164,24 @@ namespace RampageXL.Entity
                     currentAnim = standingRAnim;
                 }
             }
+            foreach (Timer t in timers)
+            {
+                t.Update();
+            }
+            if (punchLength.timeIsUp())
+            {
+                currentPunch = null;
+            }
 
             currentAnim.Update();
 		}
 
 		public override void Draw()
 		{
-            if (currentPunch != null)
-                currentPunch.Draw();
             //rectangle.Draw();
             currentAnim.Draw(pos);
+            if (currentPunch != null)
+                currentPunch.Draw();
 		}
 	}
 }
