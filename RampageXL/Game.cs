@@ -62,6 +62,7 @@ namespace RampageXL
                 if (p.currentPunch != null && b.isColliding(p.currentPunch))
                 {
                     b.health--;
+                    b.hit = true;
                     if (b.health <= 0)
                     {
                         buildingsToRemove.Add(b);

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using OpenTK;
 using RampageXL.Shape;
 using RampageXL.AnimationPackage;
+using RampageXL.Timing;
 
 namespace RampageXL.Entity
 {
@@ -21,7 +22,15 @@ namespace RampageXL.Entity
         private Rectangle standing001;
         private Rectangle standing002;
 
+        private Animation hitAnim;
+        private Rectangle hit000;
+        private Rectangle hit001;
+        private Rectangle hit002;
+
         private Animation collapsing;
+
+        public bool hit { get; set; }
+        public Timer hitAnimTimer;
 
         public Building(Vector2 pos, Bounds bounds)
         {
@@ -29,7 +38,6 @@ namespace RampageXL.Entity
 
             this.pos = pos;
             this.boundingBox = new BoundingBox(pos.X, pos.Y, bounds);
-            this.rectangle = new Rectangle(pos.X, pos.Y, bounds.width, bounds.height);
 
             standing000 = new Rectangle(pos.X, pos.Y, bounds.width, bounds.height);
             standing001 = new Rectangle(pos.X, pos.Y, bounds.width, bounds.height);
@@ -43,15 +51,37 @@ namespace RampageXL.Entity
             standingFrames.Add(standing002);
             standingAnim = new Animation(standingFrames, 100, AnimationMode.LOOP);
 
-            rectangle = standing000;
+            hit000 = new Rectangle(pos.X, pos.Y, bounds.width, bounds.height);
+            hit001 = new Rectangle(pos.X, pos.Y, bounds.width, bounds.height);
+            hit002 = new Rectangle(pos.X, pos.Y, bounds.width, bounds.height);
+            hit000.setTexture("../../res/tex/building/hit000.png");
+            hit001.setTexture("../../res/tex/building/hit001.png");
+            hit002.setTexture("../../res/tex/building/hit002.png");
+            List<Rectangle> hitFrames = new List<Rectangle>();
+            hitFrames.Add(hit000);
+            hitFrames.Add(hit001);
+            hitFrames.Add(hit002);
+            hitAnim = new Animation(hitFrames, 8, AnimationMode.LOOP);
+
+            hit = false;
+            hitAnimTimer = new Timer(30);
 
             currentAnim = standingAnim;
-
-            rectangle.setColor(255, 0, 255);
         }
 
         public override void Update()
         {
+            if (hit)
+            {
+                currentAnim = hitAnim;
+                hitAnimTimer.startTimer();
+                hit = false;
+            }
+            if (hitAnimTimer.timeIsUp())
+            {
+                currentAnim = standingAnim;
+            }
+            hitAnimTimer.Update();
             currentAnim.Update();
         }
 
