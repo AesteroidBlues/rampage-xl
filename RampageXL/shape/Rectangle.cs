@@ -20,6 +20,7 @@ namespace RampageXL.Shape
 		private Image image;
 
 		private bool dirty = false;
+		private bool hidden = false;
 
 		public Rectangle(float x, float y, int w, int h) : this(x, y, 0, w, h) { }
 
@@ -62,7 +63,20 @@ namespace RampageXL.Shape
 			return this;
 		}
 
+		public void Hide()
+		{
+			hidden = true;
+			this.setColor(255, 255, 255, 0);
+		}
+
+		public void Unhide()
+		{
+			hidden = false;
+			this.setColor(255, 255, 255, 255);
+		}
+
 		public override void Draw()  {
+			if(hidden) return;
 			if (image != null)
 			{
 				image.Draw(position, bounds);
