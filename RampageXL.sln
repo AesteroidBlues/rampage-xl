@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RampageXL", "RampageXL\Ramp
 		{73CA447A-590A-42B6-AC2B-38EA2038007D} = {73CA447A-590A-42B6-AC2B-38EA2038007D}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestureFramework", "F:\Dropbox\UCSD\CSE 198\Simple Gesture Processing using the Kinect for Windows\C#\GestureFramework\GestureFramework.csproj", "{73CA447A-590A-42B6-AC2B-38EA2038007D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestureFramework", "GestureFramework\GestureFramework.csproj", "{73CA447A-590A-42B6-AC2B-38EA2038007D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

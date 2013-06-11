@@ -82,12 +82,6 @@
   <ItemGroup>
     <Content Include="gestures.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="F:\Dropbox\UCSD\CSE 198\Simple Gesture Processing using the Kinect for Windows\C#\GestureFramework\GestureFramework.csproj">
-      <Project>{73ca447a-590a-42b6-ac2b-38ea2038007d}</Project>
-      <Name>GestureFramework</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
