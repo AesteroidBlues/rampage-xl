@@ -155,6 +155,11 @@ namespace RampageXL.Entity
 			this.punching = true;
 		}
 
+		public void SetPosition(Vector2 newPos)
+		{
+			this.rectangle.setPosition(newPos);
+		}
+
 		public override void Update()
 		{
 			if (punching)
