@@ -1,0 +1,14 @@
+﻿<Gestures GestureResetTimeout="500">
+  <!--<Gesture Description="Previous Bullet" MaxExecutionTime="1000" MappedKeyCode="PRIOR">
+    <GestureComponent FirstJoint="WristLeft" SecondJoint="ShoulderLeft" EndingRelationship="BelowAndLeft" BeginningRelationship="AboveAndLeft" />
+  </Gesture>
+  <Gesture Description="Next Bullet" MaxExecutionTime="1000" MappedKeyCode="NEXT">
+    <GestureComponent FirstJoint="WristRight" SecondJoint="ShoulderRight" EndingRelationship="BelowAndRight" BeginningRelationship="AboveAndRight" />
+  </Gesture>-->
+  <Gesture Description="Next Bullet" MaxExecutionTime="1000" MappedKeyCode="RBUTTON">
+    <GestureComponent FirstJoint="WristRight" SecondJoint="ElbowRight" EndingRelationship="RightOf" BeginningRelationship="AboveAndLeft" />
+  </Gesture>
+  <Gesture Description="Next Bullet" MaxExecutionTime="1000" MappedKeyCode="LBUTTON">
+    <GestureComponent FirstJoint="WristLeft" SecondJoint="ElbowLeft" EndingRelationship="LeftOf" BeginningRelationship="AboveAndRight" />
+  </Gesture>
+</Gestures>
