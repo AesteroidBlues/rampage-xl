@@ -33,7 +33,7 @@ namespace RampageXL.Entity
 		readonly int PLAYER_WIDTH = 64;
 		readonly int PLAYER_HEIGHT = 64;
 
-		Vector2 pos;
+		public Vector2 pos;
 		Bounds bounds;
 
 		private bool moveLeft;
@@ -112,26 +112,32 @@ namespace RampageXL.Entity
 
 		public void OnKeyDown(Object sender, KeyboardKeyEventArgs e)
 		{
-			if (e.Key == Key.A) {
-				moveLeft = true;
-			} if (e.Key == Key.D) {
-				moveRight = true;
-			} if (e.Key == Key.Space && punchCooldown.timeIsUp()) {
-				punching = true;
-				punchCooldown.startTimer();
-				punchLength.startTimer();
-			}
+            if (e.Key == Key.A)
+            {
+                moveLeft = true;
+            } if (e.Key == Key.D)
+            {
+                moveRight = true;
+            } if (e.Key == Key.Space && punchCooldown.timeIsUp())
+            {
+                punching = true;
+                punchCooldown.startTimer();
+                punchLength.startTimer();
+            }
 		}
 
 		public void OnKeyUp(Object sender, KeyboardKeyEventArgs e)
 		{
-			if (e.Key == Key.A) {
-				moveLeft = false;
-			} if (e.Key == Key.D) {
-				moveRight = false;
-			} if (e.Key == Key.Space) {
-				punching = false;
-			}
+            if (e.Key == Key.A)
+            {
+                moveLeft = false;
+            } if (e.Key == Key.D)
+            {
+                moveRight = false;
+            } if (e.Key == Key.Space)
+            {
+                punching = false;
+            }
 		}
 
 		public void DoPunch(Direction dir)

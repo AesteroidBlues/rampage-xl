@@ -19,6 +19,8 @@ using Microsoft.Kinect.Toolkit;
 using GestureFramework;
 using WindowsInput;
 
+using System.Windows.Forms;
+
 namespace RampageXL
 {
 	class Game : GameWindow
@@ -46,20 +48,21 @@ namespace RampageXL
 
 		protected override void OnLoad(EventArgs e)
 		{
+
+            //KINECT LOAD
+            // First Load the XML File that contains the application configuration
+            _gestureMap = new GestureMap();
+            _gestureMap.LoadGesturesFromXml(GestureFileName);
+
+            _chooser = new KinectSensorChooser();
+            _chooser.KinectChanged += ChooserSensorChanged;
+            _chooser.Start();
+
+            // Instantiate the in memory representation of the gesture state for each player
+            _gestureMaps = new Dictionary<int, GestureMapState>();
+            //END KINECT LOAD
+
 			base.OnLoad(e);
-
-			//KINECT LOAD
-			// First Load the XML File that contains the application configuration
-			_gestureMap = new GestureMap();
-			_gestureMap.LoadGesturesFromXml(GestureFileName);
-
-			_chooser = new KinectSensorChooser();
-			_chooser.KinectChanged += ChooserSensorChanged;
-			_chooser.Start();
-
-			// Instantiate the in memory representation of the gesture state for each player
-			_gestureMaps = new Dictionary<int, GestureMapState>();
-			//END KINECT LOAD
 
 			XLG.keyboard = this.Keyboard;
 			MugicConnection.Connect(Config.CalVRIP);
@@ -137,6 +140,10 @@ namespace RampageXL
 		///////////////////////////////////////////////////////////////////////////////
 		void ChooserSensorChanged(object sender, KinectChangedEventArgs e)
 		{
+
+            MessageBox.Show("Error Message", "Error Title", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+
 			var old = e.OldSensor;
 			StopKinect(old);
 
@@ -147,9 +154,10 @@ namespace RampageXL
 			}
 
 			newsensor.SkeletonStream.Enable();
-			newsensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
-			newsensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
+			//newsensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
+			//newsensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
 			newsensor.AllFramesReady += SensorAllFramesReady;
+            
 
 			try
 			{
@@ -180,16 +188,17 @@ namespace RampageXL
 		{
 			if (_gestureMap.MessagesWaiting)
 			{
-				foreach (var msg in _gestureMap.Messages)
-				{
-					//rtbMessages.AppendText(msg + "\r");
-				}
+                //foreach (var msg in _gestureMap.Messages)
+                //{
+                //    rtbMessages.AppendText(msg + "\r");
+                //}
 				//rtbMessages.ScrollToCaret();
 				_gestureMap.MessagesWaiting = false;
 			}
 
-			SensorDepthFrameReady(e);
+			//SensorDepthFrameReady(e);
 			SensorSkeletonFrameReady(e);
+            MessageBox.Show("Error Message", "Error Title", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 			//video.Image = _bitmap;
 		}
 
@@ -229,19 +238,32 @@ namespace RampageXL
 						//rtbMessages.ScrollToCaret();
 						//rtbMessages.AppendText("Command passed to System: " + keycode + "\r");
 						//rtbMessages.ScrollToCaret();
+                        
 						InputSimulator.SimulateKeyPress(keycode);
+                        switch (keycode)
+                        {
+                            case VirtualKeyCode.RBUTTON:
+                                p.DoPunch(Direction.Right);
+                                break;
+                            case VirtualKeyCode.LBUTTON:
+                                p.DoPunch(Direction.Left);
+                                break;
+                            default:
+                                break;
+                        }
+
 						_gestureMaps[sd.TrackingId].ResetAll(sd);
 					}
+
+                    p.SetPosition(new Vector2(sd.Joints[JointType.HipCenter].Position.X, p.pos.Y));
 
 					// This break prevents multiple player data from being confused during evaluation.
 					// If one were going to dis-allow multiple players, this trackingId would facilitate
 					// that feat.
-					PlayerId = sd.TrackingId;
+					PlayerId = sd.TrackingId;           
 
-
-					//if (_bitmap != null)
-					//    _bitmap = AddSkeletonToDepthBitmap(sd, _bitmap, true);
-
+					if (_bitmap != null)
+					    _bitmap = AddSkeletonToDepthBitmap(sd, _bitmap, true);                 
 				}
 			}
 		}
@@ -253,8 +275,8 @@ namespace RampageXL
 		/// <param name="bitmap"></param>
 		/// <param name="isActive"> </param>
 		/// <returns></returns>
-		//private Bitmap AddSkeletonToDepthBitmap(Skeleton skeleton, Bitmap bitmap, bool isActive)
-		//{
+		private Bitmap AddSkeletonToDepthBitmap(Skeleton skeleton, Bitmap bitmap, bool isActive)
+		{
 		//    Pen pen;
 
 		//    var gobject = Graphics.FromImage(bitmap);
@@ -308,8 +330,8 @@ namespace RampageXL
 		//    gobject.DrawLine(pen, kneeright.X, kneeright.Y, ankleright.X, ankleright.Y);
 		//    gobject.DrawLine(pen, kneeleft.X, kneeleft.Y, ankleleft.X, ankleleft.Y);
 
-		//    return bitmap;
-		//}
+		    return bitmap;
+		}
 
 
 		/// <summary>
@@ -337,32 +359,32 @@ namespace RampageXL
 
 		protected void GetWaitingMessages(Dictionary<int, GestureMapState> gestureMapDict)
 		{
-			foreach (var map in _gestureMaps)
-			{
-				if (map.Value.MessagesWaiting)
-				{
-					foreach (var msg in map.Value.Messages)
-					{
-						//rtbMessages.AppendText(msg + "\r");
-						//rtbMessages.ScrollToCaret();
-					}
-					map.Value.Messages.Clear();
-					map.Value.MessagesWaiting = false;
-				}
-			}
+            //foreach (var map in _gestureMaps)
+            //{
+            //    if (map.Value.MessagesWaiting)
+            //    {
+            //        foreach (var msg in map.Value.Messages)
+            //        {
+            //            rtbMessages.AppendText(msg + "\r");
+            //            rtbMessages.ScrollToCaret();
+            //        }
+            //        map.Value.Messages.Clear();
+            //        map.Value.MessagesWaiting = false;
+            //    }
+            //}
 		}
 
 
 		void SensorDepthFrameReady(AllFramesReadyEventArgs e)
 		{
-			// if the window is displayed, show the depth buffer image
-			//if (WindowState != FormWindowState.Minimized)
-			//{
-				using (var frame = e.OpenDepthImageFrame())
-				{
-					_bitmap = CreateBitMapFromDepthFrame(frame);
-				}
-			//}
+            //if the window is displayed, show the depth buffer image
+            //if (WindowState != FormWindowState.Minimized)
+            //{
+                using (var frame = e.OpenDepthImageFrame())
+                {
+                    _bitmap = CreateBitMapFromDepthFrame(frame);
+                }
+            //}
 		}
 
 

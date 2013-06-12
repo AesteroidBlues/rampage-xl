@@ -32,10 +32,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Coding4Fun.Kinect.WinForm">
-      <HintPath>..\..\..\CarMaxDisplayControllerWin\CarMaxDisplayControllerWin\bin\Debug\Coding4Fun.Kinect.WinForm.dll</HintPath>
+      <HintPath>.\Coding4Fun.Kinect.WinForm.dll</HintPath>
+    </Reference>
+    <Reference Include="Coding4Fun.Kinect.Wpf">
+      <HintPath>.\Coding4Fun.Kinect.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="InputSimulator">
-      <HintPath>..\..\..\CarMaxDisplayControllerWin\CarMaxDisplayControllerWin\bin\Debug\InputSimulator.dll</HintPath>
+      <HintPath>.\InputSimulator.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Kinect, Version=1.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
