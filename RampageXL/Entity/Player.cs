@@ -12,6 +12,8 @@ using RampageXL.Shape;
 using RampageXL.AnimationPackage;
 using RampageXL.Timing;
 
+using System.Windows.Forms;
+
 namespace RampageXL.Entity
 {
 	public enum Direction
@@ -42,9 +44,9 @@ namespace RampageXL.Entity
 
 		private int facing;
 
-		private List<Timer> timers;
-		private Timer punchCooldown;
-		private Timer punchLength;
+		private List<RampageXL.Timing.Timer> timers;
+        private RampageXL.Timing.Timer punchCooldown;
+        private RampageXL.Timing.Timer punchLength;
 
 		public Player() : this(0, 0) {}
 		public Player(int x, int y) : this(new Vector2(x, y)) {}
@@ -63,9 +65,9 @@ namespace RampageXL.Entity
 			facing = -1;
 
 			/// TIMER INIT
-			timers  = new List<Timer>();
-			punchCooldown = new Timer(40);
-			punchLength = new Timer(2);
+            timers = new List<RampageXL.Timing.Timer>();
+            punchCooldown = new RampageXL.Timing.Timer(40);
+            punchLength = new RampageXL.Timing.Timer(2);
 
 			timers.Add(punchCooldown);
 			timers.Add(punchLength);
@@ -202,7 +204,7 @@ namespace RampageXL.Entity
 					currentAnim = standingRAnim;
 				}
 			}
-			foreach (Timer t in timers)
+            foreach (RampageXL.Timing.Timer t in timers)
 			{
 				t.Update();
 			}

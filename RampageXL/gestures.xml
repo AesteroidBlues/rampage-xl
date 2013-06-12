@@ -5,10 +5,16 @@
   <Gesture Description="Next Bullet" MaxExecutionTime="1000" MappedKeyCode="NEXT">
     <GestureComponent FirstJoint="WristRight" SecondJoint="ShoulderRight" EndingRelationship="BelowAndRight" BeginningRelationship="AboveAndRight" />
   </Gesture>-->
-  <Gesture Description="Next Bullet" MaxExecutionTime="1000" MappedKeyCode="RBUTTON">
+  <Gesture Description="Right Hand Right Punch" MaxExecutionTime="1000" MappedKeyCode="RBUTTON">
     <GestureComponent FirstJoint="WristRight" SecondJoint="ElbowRight" EndingRelationship="RightOf" BeginningRelationship="AboveAndLeft" />
   </Gesture>
-  <Gesture Description="Next Bullet" MaxExecutionTime="1000" MappedKeyCode="LBUTTON">
+  <Gesture Description="Left Hand Left Punch" MaxExecutionTime="1000" MappedKeyCode="LBUTTON">
     <GestureComponent FirstJoint="WristLeft" SecondJoint="ElbowLeft" EndingRelationship="LeftOf" BeginningRelationship="AboveAndRight" />
+  </Gesture>
+  <Gesture Description="Right Hand Left Punch" MaxExecutionTime="1000" MappedKeyCode="LBUTTON">
+    <GestureComponent FirstJoint="WristRight" SecondJoint="ElbowRight" EndingRelationship="LeftOf" BeginningRelationship="AboveAndLeft" />
+  </Gesture>
+  <Gesture Description="Left Hand Right Punch" MaxExecutionTime="1000" MappedKeyCode="RBUTTON">
+    <GestureComponent FirstJoint="WristLeft" SecondJoint="ElbowLeft" EndingRelationship="RightOf" BeginningRelationship="AboveAndRight" />
   </Gesture>
 </Gestures>

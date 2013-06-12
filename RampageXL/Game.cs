@@ -141,8 +141,8 @@ namespace RampageXL
 		void ChooserSensorChanged(object sender, KinectChangedEventArgs e)
 		{
 
+            //As of 6/12/2013 @ 10:30AM, the program never enters here
             MessageBox.Show("Error Message", "Error Title", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
 
 			var old = e.OldSensor;
 			StopKinect(old);
@@ -162,11 +162,9 @@ namespace RampageXL
 			try
 			{
 				newsensor.Start();
-				//rtbMessages.Text = "Kinect Started" + "\r";
 			}
 			catch (System.IO.IOException)
 			{
-				//rtbMessages.Text = "Kinect Not Started" + "\r";
 				//maybe another app is using Kinect
 				_chooser.TryResolveConflict();
 			}
@@ -188,17 +186,11 @@ namespace RampageXL
 		{
 			if (_gestureMap.MessagesWaiting)
 			{
-                //foreach (var msg in _gestureMap.Messages)
-                //{
-                //    rtbMessages.AppendText(msg + "\r");
-                //}
-				//rtbMessages.ScrollToCaret();
 				_gestureMap.MessagesWaiting = false;
 			}
 
 			//SensorDepthFrameReady(e);
 			SensorSkeletonFrameReady(e);
-            MessageBox.Show("Error Message", "Error Title", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 			//video.Image = _bitmap;
 		}
 
@@ -233,13 +225,10 @@ namespace RampageXL
 					GetWaitingMessages(_gestureMaps);
 
 					if (keycode != VirtualKeyCode.NONAME)
-					{
-						//rtbMessages.AppendText("Gesture accepted from player " + sd.TrackingId + "\r");
-						//rtbMessages.ScrollToCaret();
-						//rtbMessages.AppendText("Command passed to System: " + keycode + "\r");
-						//rtbMessages.ScrollToCaret();
-                        
-						InputSimulator.SimulateKeyPress(keycode);
+					{     
+                        //Another method
+						//InputSimulator.SimulateKeyPress(keycode);
+
                         switch (keycode)
                         {
                             case VirtualKeyCode.RBUTTON:
