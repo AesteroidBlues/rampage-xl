@@ -57,11 +57,20 @@ namespace RampageXL.AnimationPackage
 		{
 			this.frames = new List<Rectangle>();
 			this.framerate = framerate;
-			this.animationMode = AnimationMode.LOOP;
+			this.animationMode = animMode;
 			this.loopMode = LoopMode.DIRECTION;
 			SetDirectionForwards();
 			loopFrom = 0;
-			loopTo = frames.Count - 1;
+		}
+
+		public Animation(int framerate, AnimationMode animMode, LoopMode loopMode)
+		{
+			this.frames = new List<Rectangle>();
+			this.framerate = framerate;
+			this.animationMode = animMode;
+			this.loopMode = loopMode;
+			SetDirectionForwards();
+			loopFrom = 0;
 		}
 
 		public Animation(List<Rectangle> frames, int framerate)
@@ -124,7 +133,18 @@ namespace RampageXL.AnimationPackage
 
 		public void AddFrame(Image newFrame)
 		{
-			Rectangle newRect = new Rectangle()
+			Rectangle newRect = new Rectangle(0, 0, newFrame.width, newFrame.height);
+			newRect.setTexture(newFrame.name);
+			frames.Add(newRect);
+			loopTo = frames.Count - 1;
+		}
+
+		public void AddFrame(Image newFrame, int w, int h)
+		{
+			Rectangle newRect = new Rectangle(0, 0, w, h);
+			newRect.setTexture(newFrame.name);
+			frames.Add(newRect);
+			loopTo = frames.Count - 1;
 		}
 
 		/// <summary>
@@ -190,7 +210,16 @@ namespace RampageXL.AnimationPackage
 			Rectangle currentFrameRect = frames[currentFrame];
 			Rectangle oldFrameRect = frames[oldFrame];
 			if (oldFrame == currentFrame)
+			{
 				oldFrameRect = null;
+			}
+			else
+			{
+				currentFrameRect.MarkDirty();
+				currentFrameRect.Unhide();
+				oldFrameRect.MarkDirty();
+				oldFrameRect.Hide();
+			}
 
 			fu = new FrameUpdate(currentFrameRect, oldFrameRect);
 		}
@@ -200,10 +229,8 @@ namespace RampageXL.AnimationPackage
 			if (fu.draw != null)
 			{
 				Rectangle current = fu.draw;
-				if (fu.clear != null)
-					fu.clear.Hide();
+
 				current.setPosition(pos);
-				current.Unhide();
 				current.Draw();
 			}
 		}

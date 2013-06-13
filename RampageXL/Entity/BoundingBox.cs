@@ -15,7 +15,7 @@ namespace RampageXL.Entity
 		private float y;
 		private Bounds bounds;
 
-        public BoundingBox(Vector2 vect, Bounds bounds) : this(vect.X, vect.Y, bounds) { }
+		public BoundingBox(Vector2 vect, Bounds bounds) : this(vect.X, vect.Y, bounds) { }
 		public BoundingBox(float x, float y, Bounds bounds)
 		{
 			this.x      = x;

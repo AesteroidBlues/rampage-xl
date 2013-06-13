@@ -100,9 +100,9 @@ namespace TexLib
 	/// Create an OpenGL texture (translucent or opaque) by loading a bitmap
 	/// from file. 24- and 32-bit bitmaps supported.
 	/// </summary>
-	public static int CreateTextureFromFile(string path)
+	public static int CreateTextureFromFile(string path, out int width, out int height)
 	{
-	  return CreateTextureFromBitmap(new Bitmap(Bitmap.FromFile(path)));
+	  return CreateTextureFromBitmap(new Bitmap(Bitmap.FromFile(path)), out width, out height);
 	}
 
 	#endregion

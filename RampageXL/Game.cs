@@ -31,7 +31,20 @@ namespace RampageXL
 			base.OnLoad(e);
 
 			XLG.keyboard = this.Keyboard;
+			
 			MugicConnection.Connect(Config.CalVRIP);
+			ImageManager.Init();
+
+			ImageManager.LoadImage(ImageName.player_standing_L00, "../../res/tex/player/george_standingL000.png");
+			ImageManager.LoadImage(ImageName.player_standing_R00, "../../res/tex/player/george_standingR000.png");
+			ImageManager.LoadImage(ImageName.player_walking_L00, "../../res/tex/player/george_walkL000.png");
+			ImageManager.LoadImage(ImageName.player_walking_L01, "../../res/tex/player/george_walkL001.png");
+			ImageManager.LoadImage(ImageName.player_walking_L02, "../../res/tex/player/george_walkL002.png");
+			ImageManager.LoadImage(ImageName.player_walking_R00, "../../res/tex/player/george_walkR000.png");
+			ImageManager.LoadImage(ImageName.player_walking_R01, "../../res/tex/player/george_walkR001.png");
+			ImageManager.LoadImage(ImageName.player_walking_R02, "../../res/tex/player/george_walkR002.png");
+
+
 			p = new Player(400, 300);
 
 			buildings = new List<Building>();

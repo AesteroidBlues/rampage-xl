@@ -65,41 +65,21 @@ namespace RampageXL.Entity
 			timers.Add(punchLength);
 
 			/// ANIM INIT
-			Rectangle standingL000 = new Rectangle(pos.X, pos.Y, bounds.width, bounds.height);
-			standingL000.setTexture("../../res/tex/player/george_standingL000.png");
-			List<Rectangle> standingLFrames = new List<Rectangle>();
-			standingLFrames.Add(standingL000);
-			standingLAnim = new Animation(standingLFrames, 1, AnimationMode.PAUSE);
+			standingLAnim = new Animation(1, AnimationMode.PAUSE);
+			standingRAnim = new Animation(1, AnimationMode.PAUSE);
+			walkingLAnim = new Animation(8, AnimationMode.LOOP, LoopMode.PINGPONG);
+			walkingRAnim = new Animation(8, AnimationMode.LOOP, LoopMode.PINGPONG);
 
-			Rectangle standingR000 = new Rectangle(pos.X, pos.Y, bounds.width, bounds.height);
-			standingR000.setTexture("../../res/tex/player/george_standingR000.png");
-			List<Rectangle> standingRFrames = new List<Rectangle>();
-			standingRFrames.Add(standingR000);
-			standingRAnim = new Animation(standingRFrames, 1, AnimationMode.PAUSE);
+			standingLAnim.AddFrame(ImageManager.GetImage(ImageName.player_standing_L00), bounds.width, bounds.height);
+			standingRAnim.AddFrame(ImageManager.GetImage(ImageName.player_standing_R00), bounds.width, bounds.height);
 
-			Rectangle walkingL000 = new Rectangle(pos.X, pos.Y, bounds.width, bounds.height);
-			Rectangle walkingL001 = new Rectangle(pos.X, pos.Y, bounds.width, bounds.height);
-			Rectangle walkingL002 = new Rectangle(pos.X, pos.Y, bounds.width, bounds.height);
-			walkingL000.setTexture("../../res/tex/player/george_walkL000.png");
-			walkingL001.setTexture("../../res/tex/player/george_walkL001.png");
-			walkingL002.setTexture("../../res/tex/player/george_walkL002.png");
-			List<Rectangle> walkingLFrames = new List<Rectangle>();
-			walkingLFrames.Add(walkingL000);
-			walkingLFrames.Add(walkingL001);
-			walkingLFrames.Add(walkingL002);
-			walkingLAnim = new Animation(walkingLFrames, 8, AnimationMode.LOOP, LoopMode.PINGPONG);
+			walkingLAnim.AddFrame(ImageManager.GetImage(ImageName.player_walking_L00), bounds.width, bounds.height);
+			walkingLAnim.AddFrame(ImageManager.GetImage(ImageName.player_walking_L01), bounds.width, bounds.height);
+			walkingLAnim.AddFrame(ImageManager.GetImage(ImageName.player_walking_L02), bounds.width, bounds.height);
 
-			Rectangle walkingR000 = new Rectangle(pos.X, pos.Y, bounds.width, bounds.height);
-			Rectangle walkingR001 = new Rectangle(pos.X, pos.Y, bounds.width, bounds.height);
-			Rectangle walkingR002 = new Rectangle(pos.X, pos.Y, bounds.width, bounds.height);
-			walkingR000.setTexture("../../res/tex/player/george_walkR000.png");
-			walkingR001.setTexture("../../res/tex/player/george_walkR001.png");
-			walkingR002.setTexture("../../res/tex/player/george_walkR002.png");
-			List<Rectangle> walkingRFrames = new List<Rectangle>();
-			walkingRFrames.Add(walkingR000);
-			walkingRFrames.Add(walkingR001);
-			walkingRFrames.Add(walkingR002);
-			walkingRAnim = new Animation(walkingRFrames, 8, AnimationMode.LOOP, LoopMode.PINGPONG);
+			walkingRAnim.AddFrame(ImageManager.GetImage(ImageName.player_walking_R00), bounds.width, bounds.height);
+			walkingRAnim.AddFrame(ImageManager.GetImage(ImageName.player_walking_R01), bounds.width, bounds.height);
+			walkingRAnim.AddFrame(ImageManager.GetImage(ImageName.player_walking_R02), bounds.width, bounds.height);
 
 			currentAnim = standingLAnim;
 		}

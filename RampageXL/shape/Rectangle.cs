@@ -50,6 +50,12 @@ namespace RampageXL.Shape
 		}
 
 		public Rectangle setPosition(Vector2 p) {
+			
+			if (position.X == p.X && position.Y == p.Y)
+			{
+				return this;
+			}
+
 			dirty = true;
 			position.X = p.X;
 			position.Y = p.Y;
@@ -60,7 +66,14 @@ namespace RampageXL.Shape
 		public Rectangle setTexture(string path)
 		{
 			image = new Image(path);
+			dirty = true;
 			return this;
+		}
+
+		public void setTexture(ImageName name)
+		{
+			image = ImageManager.GetImage(name);
+			dirty = true;
 		}
 
 		public void Hide()
@@ -99,6 +112,14 @@ namespace RampageXL.Shape
 			}
 		}
 
+		/// <summary>
+		/// ONLY USE THIS IF YOU NEED TO SEND THE RECT AS A MUGIC PACKET.
+		/// </summary>
+		public void MarkDirty()
+		{
+			dirty = true;
+		}
+
 		public override MugicPacket GetUpdate() {
 			if(!dirty) return null;
 
@@ -112,6 +133,11 @@ namespace RampageXL.Shape
 
 			packet.Parameter(MugicParam.Width, bounds.width * Config.WallScalar);
 			packet.Parameter(MugicParam.Height, bounds.height * Config.WallScalar);
+
+			if (image != null)
+			{
+				packet.Parameter(MugicParam.Texture, image.Filename);
+			}
 
 			dirty = false;
 

@@ -56,6 +56,7 @@
     <Compile Include="Entity\Player.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Image.cs" />
+    <Compile Include="ImageManager.cs" />
     <Compile Include="Mugic\MugicConnection.cs" />
     <Compile Include="Mugic\MugicObjectManager.cs" />
     <Compile Include="Mugic\MugicPacket.cs" />

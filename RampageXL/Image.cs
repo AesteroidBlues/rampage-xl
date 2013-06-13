@@ -26,12 +26,32 @@ namespace RampageXL
 
 		public int width
 		{
-			get{return width;}
+			get{return _width;}
 		}
 
 		public int height
 		{
-			get {return height;}
+			get {return _height;}
+		}
+
+		private ImageName _name;
+		public ImageName name 
+		{
+			get { return _name; }
+		}
+
+		private string _path;
+		public string path
+		{
+			get { return _path; }
+		}
+
+		public string Filename
+		{
+			get
+			{
+				return path.Substring(path.LastIndexOf("/") + 1);
+			}
 		}
 
 		public Image(String path)
@@ -41,8 +61,14 @@ namespace RampageXL
 				return;
 			}
 
-			_id = TexUtil.CreateTextureFromFile(path);
+			_path = path;
+			_id = TexUtil.CreateTextureFromFile(path, out _width, out _height);
 			color = new Color4(255, 255, 255, 255);
+		}
+
+		public void SetName(ImageName name)
+		{
+			_name = name;
 		}
 
 		public void Draw(Vector3 position, Bounds bounds)
