@@ -138,7 +138,21 @@ namespace RampageXL.Entity
 
         public void SetPosition(Vector2 newPos)
         {
-            this.pos = newPos;
+            if (this.pos.X < newPos.X - 15)
+            {
+                moveLeft = false;
+                moveRight = true;
+            }
+            else if (this.pos.X > newPos.X + 15)
+            {
+                moveRight = false;
+                moveLeft = true;
+            }
+            else
+            {
+                moveLeft = false;
+                moveRight = false;
+            }
         }
         //END KINECT CALLS
 
@@ -151,13 +165,13 @@ namespace RampageXL.Entity
 			}
 			if (moveLeft) 
 			{ 
-				pos.X -= 1;
+				pos.X -= 7;
 				currentAnim = walkingLAnim;
 				facing = -1;
 			}
 			if (moveRight) 
 			{
-				pos.X += 1;
+				pos.X += 7;
 				currentAnim = walkingRAnim;
 				facing = 1;
 			}
