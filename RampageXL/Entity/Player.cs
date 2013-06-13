@@ -14,6 +14,12 @@ using RampageXL.Timing;
 
 namespace RampageXL.Entity
 {
+    public enum Direction
+    {
+        Left,
+        Right
+    }
+
 	class Player : GameObject
 	{
 		private Animation currentAnim;
@@ -27,7 +33,7 @@ namespace RampageXL.Entity
 		readonly int PLAYER_WIDTH = 64;
 		readonly int PLAYER_HEIGHT = 64;
 
-		Vector2 pos;
+		public Vector2 pos;
 		Bounds bounds;
 
 		private bool moveLeft;
@@ -107,6 +113,34 @@ namespace RampageXL.Entity
 				punching = false;
 			}
 		}
+
+        //KINECT CALLS
+        public void DoPunch(Direction dir)
+        {
+            switch (dir)
+            {
+                case Direction.Left: DoPunchLeft(); break;
+                case Direction.Right: DoPunchRight(); break;
+            }
+        }
+
+        private void DoPunchLeft()
+        {
+            this.facing = 1;
+            this.punching = true;
+        }
+
+        private void DoPunchRight()
+        {
+            this.facing = -1;
+            this.punching = true;
+        }
+
+        public void SetPosition(Vector2 newPos)
+        {
+            this.pos = newPos;
+        }
+        //END KINECT CALLS
 
 		public override void Update()
 		{

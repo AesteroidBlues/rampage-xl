@@ -12,10 +12,28 @@ using RampageXL.Shape;
 using RampageXL.Mugic;
 using RampageXL.Entity;
 
+using Microsoft.Kinect;
+using GestureFramework;
+using WindowsInput;
+
+using System.Windows.Forms;
+
 namespace RampageXL
 {
 	class Game : GameWindow
 	{
+        //KINECT VARS
+        public KinectSensor sensor;
+        public Skeleton[] skeletons;
+        public SkeletonFrame skeletonFrame;
+
+        public GestureMap _gestureMap;
+        public Dictionary<int, GestureMapState> _gestureMaps;
+        public const string GestureFileName = "gestures.xml";
+
+        public int playerId;
+        //END KINECT VARS
+
 		List<Building> buildings;
 
 		Player p;
@@ -28,6 +46,20 @@ namespace RampageXL
 
 		protected override void OnLoad(EventArgs e)
 		{
+            //KINECT LOAD
+            // First Load the XML File that contains the application configuration
+            _gestureMap = new GestureMap();
+            _gestureMap.LoadGesturesFromXml(GestureFileName);
+
+            sensor = KinectSensor.KinectSensors.FirstOrDefault(s => s.Status == KinectStatus.Connected);
+            sensor.SkeletonStream.Enable();
+            skeletons = new Skeleton[sensor.SkeletonStream.FrameSkeletonArrayLength];
+            sensor.Start();
+
+            // Instantiate the in memory representation of the gesture state for each player
+            _gestureMaps = new Dictionary<int, GestureMapState>();
+            //END KINECT LOAD
+
 			base.OnLoad(e);
 
 			XLG.keyboard = this.Keyboard;
@@ -61,6 +93,7 @@ namespace RampageXL
 
 			MugicObjectManager.SendShapes();
 
+            SkeletonEval();
 			p.Update();
 
 			//Collision checking
@@ -109,5 +142,78 @@ namespace RampageXL
 				game.Run();
 			}
 		}
+
+        //KINECT METHODS
+        void SkeletonEval()
+        {
+            using (SkeletonFrame skeletonFrameData = sensor.SkeletonStream.OpenNextFrame(40))
+            {
+                if (skeletonFrameData == null)
+                {
+                    return;
+                }
+
+                var allSkeletons = new Skeleton[skeletonFrameData.SkeletonArrayLength];
+                skeletonFrameData.CopySkeletonDataTo(allSkeletons);
+
+                foreach (Skeleton sd in allSkeletons)
+                {
+                    // If this skeleton is no longer being tracked, skip it
+                    if (sd.TrackingState != SkeletonTrackingState.Tracked)
+                    {
+                        continue;
+                    }
+
+                    // If there is not already a gesture state map for this skeleton, then create one
+                    if (!_gestureMaps.ContainsKey(sd.TrackingId))
+                    {
+                        var mapstate = new GestureMapState(_gestureMap);
+                        _gestureMaps.Add(sd.TrackingId, mapstate);
+                    }
+
+                    var keycode = _gestureMaps[sd.TrackingId].Evaluate(sd, false, Config.WindowWidth, Config.WindowHeight);
+
+                    if (keycode != VirtualKeyCode.NONAME)
+					{
+                        switch (keycode)
+                        {
+                        case VirtualKeyCode.RBUTTON:
+                            p.DoPunch(Direction.Right);
+                            break;
+                        case VirtualKeyCode.LBUTTON:
+                            p.DoPunch(Direction.Left);
+                            break;
+                         default:
+                            break;
+                        }
+
+						_gestureMaps[sd.TrackingId].ResetAll(sd);
+					}
+
+                    SkeletonPoint sp = CalculateJointPosition(sd.Joints[JointType.HipCenter]);
+                    p.SetPosition(new Vector2(sp.X, p.pos.Y));
+
+                    playerId = sd.TrackingId;
+                }
+            }
+        }
+
+        protected SkeletonPoint CalculateJointPosition(Joint joint)
+        {
+            var jointx = joint.Position.X;
+            var jointy = joint.Position.Y;
+            var jointz = joint.Position.Z;
+
+            if (jointz < 1)
+                jointz = 1;
+
+            var jointnormx = jointx / (jointz * 1.1f);
+            var jointnormy = -(jointy / jointz * 1.1f);
+            var point = new SkeletonPoint();
+            point.X = (jointnormx + 0.5f) * Config.WindowWidth;
+            point.Y = (jointnormy + 0.5f) * Config.WindowHeight;
+            return point;
+        }
+        //END KINECT METHODS
 	}
 }
