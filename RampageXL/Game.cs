@@ -51,28 +51,28 @@ namespace RampageXL
 			p.Update();
 
 			//Collision checking
-            List<Building> buildingsToRemove = new List<Building>();
+			List<Building> buildingsToRemove = new List<Building>();
 			foreach (Building b in buildings)
 			{
-                b.Update();
+				b.Update();
 				if (b.isColliding(p))
 				{
 					Console.Write("\nLOOK OUT JC A COLLISION (with " + b.ToString() + ")!\n");
 				}
-                if (p.currentPunch != null && b.isColliding(p.currentPunch))
-                {
-                    b.health--;
-                    b.hit = true;
-                    if (b.health <= 0)
-                    {
-                        buildingsToRemove.Add(b);
-                    }
-                }
+				if (p.currentPunch != null && b.isColliding(p.currentPunch))
+				{
+					b.health--;
+					b.hit = true;
+					if (b.health <= 0)
+					{
+						buildingsToRemove.Add(b);
+					}
+				}
 			}
-            foreach (Building b in buildingsToRemove)
-            {
-                buildings.Remove(b);
-            }
+			foreach (Building b in buildingsToRemove)
+			{
+				buildings.Remove(b);
+			}
 		}
 
 		protected override void OnRenderFrame(FrameEventArgs e)
@@ -84,7 +84,7 @@ namespace RampageXL
 			{
 				b.Draw();
 			}
-            p.Draw();
+			p.Draw();
 
 			SwapBuffers();
 		}

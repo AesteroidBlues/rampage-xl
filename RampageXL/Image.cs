@@ -21,6 +21,19 @@ namespace RampageXL
 		private int _id;
 		private Color4 color;
 
+		private int _width;
+		private int _height;
+
+		public int width
+		{
+			get{return width;}
+		}
+
+		public int height
+		{
+			get {return height;}
+		}
+
 		public Image(String path)
 		{
 			if (!System.IO.File.Exists(path)) {
