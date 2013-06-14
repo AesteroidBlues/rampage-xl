@@ -79,12 +79,14 @@ namespace RampageXL.Shape
 		public void Hide()
 		{
 			hidden = true;
+			dirty = true;
 			this.setColor(255, 255, 255, 0);
 		}
 
 		public void Unhide()
 		{
 			hidden = false;
+			dirty = true;
 			this.setColor(255, 255, 255, 255);
 		}
 
@@ -130,9 +132,11 @@ namespace RampageXL.Shape
 			packet.Parameter(MugicParam.X, position.X * Config.WallScalar);
 			packet.Parameter(MugicParam.Y, position.Y * Config.WallScalar);
 			packet.Parameter(MugicParam.Z, position.Z * Config.WallScalar);
+			packet.Parameter(MugicParam.a, color.A);
 
 			packet.Parameter(MugicParam.Width, bounds.width * Config.WallScalar);
 			packet.Parameter(MugicParam.Height, bounds.height * Config.WallScalar);
+			
 
 			if (image != null)
 			{

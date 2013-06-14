@@ -21,6 +21,7 @@ namespace RampageXL.AnimationPackage
 		LOOP, 
 		GOTO,
 		PAUSE,
+		PLAYONCE
 	}
 	/// <summary>
 	/// Enumeration of loop modes
@@ -34,6 +35,8 @@ namespace RampageXL.AnimationPackage
 		PINGPONG,
 		RANDOM
 	}
+
+	public delegate void AnimationDoneCallback();
 
 	class Animation
 	{
@@ -52,6 +55,7 @@ namespace RampageXL.AnimationPackage
 
 		private Random random = new Random();
 		private int currentTick = 0;
+		AnimationDoneCallback callback;
 
 		public Animation(int framerate, AnimationMode animMode)
 		{
@@ -113,8 +117,6 @@ namespace RampageXL.AnimationPackage
 			this.framerate = framerate;
 			this.animationMode = animMode;
 			this.loopMode = loopMode;
-			this.loopFrom = loopFrom;
-			this.loopTo = loopTo;
 			loopFrom = 0;
 			loopTo = frames.Count - 1;
 			SetDirectionForwards();
@@ -147,6 +149,11 @@ namespace RampageXL.AnimationPackage
 			loopTo = frames.Count - 1;
 		}
 
+		public void SetPlayOnceDoneCallback(AnimationDoneCallback c)
+		{
+			this.callback = c;
+		}
+
 		/// <summary>
 		/// Updates the animation
 		/// </summary>
@@ -173,7 +180,11 @@ namespace RampageXL.AnimationPackage
 							animationMode = AnimationMode.PAUSE;
 						}
 					}
-
+					if (animationMode == AnimationMode.PLAYONCE)
+					{
+						currentFrame = 0;
+						callback.Invoke();
+					}
 					if (animationMode == AnimationMode.LOOP)
 					{
 						if (loopMode == LoopMode.DIRECTION)

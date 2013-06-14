@@ -27,11 +27,13 @@ namespace RampageXL.Entity
 		private Animation standingRAnim;
 		private Animation walkingLAnim;
 		private Animation walkingRAnim;
+		private Animation punchLAnim;
+		private Animation punchRAnim;
 
 		public Punch currentPunch;
 
-		readonly int PLAYER_WIDTH = 64;
-		readonly int PLAYER_HEIGHT = 64;
+		readonly int PLAYER_WIDTH = 106;
+		readonly int PLAYER_HEIGHT = 151;
 
 		public Vector2 pos;
 		Bounds bounds;
@@ -75,6 +77,8 @@ namespace RampageXL.Entity
 			standingRAnim = new Animation(1, AnimationMode.PAUSE);
 			walkingLAnim = new Animation(8, AnimationMode.LOOP, LoopMode.PINGPONG);
 			walkingRAnim = new Animation(8, AnimationMode.LOOP, LoopMode.PINGPONG);
+			punchLAnim = new Animation(8, AnimationMode.PLAYONCE);
+			punchRAnim = new Animation(8, AnimationMode.PLAYONCE);
 
 			standingLAnim.AddFrame(ImageManager.GetImage(ImageName.player_standing_L00), bounds.width, bounds.height);
 			standingRAnim.AddFrame(ImageManager.GetImage(ImageName.player_standing_R00), bounds.width, bounds.height);
@@ -86,6 +90,17 @@ namespace RampageXL.Entity
 			walkingRAnim.AddFrame(ImageManager.GetImage(ImageName.player_walking_R00), bounds.width, bounds.height);
 			walkingRAnim.AddFrame(ImageManager.GetImage(ImageName.player_walking_R01), bounds.width, bounds.height);
 			walkingRAnim.AddFrame(ImageManager.GetImage(ImageName.player_walking_R02), bounds.width, bounds.height);
+
+			punchLAnim.AddFrame(ImageManager.GetImage(ImageName.player_attack_L01), bounds.width, bounds.height);
+			punchLAnim.AddFrame(ImageManager.GetImage(ImageName.player_attack_L02), bounds.width, bounds.height);
+			punchLAnim.AddFrame(ImageManager.GetImage(ImageName.player_attack_L03), bounds.width, bounds.height);
+
+			punchRAnim.AddFrame(ImageManager.GetImage(ImageName.player_attack_R01), bounds.width, bounds.height);
+			punchRAnim.AddFrame(ImageManager.GetImage(ImageName.player_attack_R02), bounds.width, bounds.height);
+			punchRAnim.AddFrame(ImageManager.GetImage(ImageName.player_attack_R03), bounds.width, bounds.height);
+
+			punchLAnim.SetPlayOnceDoneCallback(new AnimationDoneCallback(this.DoAnimCallback));
+			punchRAnim.SetPlayOnceDoneCallback(new AnimationDoneCallback(this.DoAnimCallback));
 
 			currentAnim = standingLAnim;
 		}
@@ -130,6 +145,7 @@ namespace RampageXL.Entity
 			this.punching = true;
 			punchCooldown.startTimer();
 			punchLength.startTimer();
+			currentAnim = punchLAnim;
 		}
 
 		private void DoPunchRight()
@@ -138,6 +154,7 @@ namespace RampageXL.Entity
 			this.punching = true;
 			punchCooldown.startTimer();
 			punchLength.startTimer();
+			currentAnim = punchRAnim;
 		}
 
 		public void SetPosition(Vector2 newPos)
@@ -160,12 +177,26 @@ namespace RampageXL.Entity
 		}
 		//END KINECT CALLS
 
+		public void DoAnimCallback()
+		{
+			if (facing == -1)
+			{
+				currentAnim = standingLAnim;
+			}
+			else
+			{
+				currentAnim = standingRAnim;
+			}
+			punching = false;
+		}
+
 		public override void Update()
 		{
 			if (punching)
 			{
 				currentPunch = new Punch(pos.X + (int) (facing * 30), pos.Y);
-				punching = false;
+				if (facing == -1) { currentAnim = punchLAnim; }
+				else { currentAnim = punchRAnim; }
 			}
 			if (moveLeft) 
 			{ 
@@ -185,7 +216,7 @@ namespace RampageXL.Entity
 				boundingBox.setPosition(pos);
 			}
 
-			if (!moveLeft && !moveRight)
+			if (!moveLeft && !moveRight && !punching)
 			{
 				if (facing == -1)
 				{

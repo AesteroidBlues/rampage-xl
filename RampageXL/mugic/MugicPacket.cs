@@ -21,7 +21,11 @@ namespace RampageXL.Mugic
 		Z,
 		Width,
 		Height,
-		Texture
+		Texture,
+		r,
+		g,
+		b,
+		a
 	}
 
 	class MugicPacket
@@ -95,6 +99,7 @@ namespace RampageXL.Mugic
 				case MugicParam.X		: return "x";
 				case MugicParam.Y		: return "y";
 				case MugicParam.Z		: return "z";
+				case MugicParam.a		: return "a";
 				case MugicParam.Width	: return "width";
 				case MugicParam.Height	: return "height";
 				case MugicParam.Texture	: return "texture";

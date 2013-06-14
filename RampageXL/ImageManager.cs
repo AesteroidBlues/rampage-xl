@@ -17,7 +17,13 @@ namespace RampageXL
 		player_walking_L02,
 		player_walking_R00,
 		player_walking_R01,
-		player_walking_R02
+		player_walking_R02,
+		player_attack_R01,
+		player_attack_R02,
+		player_attack_R03,
+		player_attack_L01,
+		player_attack_L02,
+		player_attack_L03
 	}
 
 	class ImageManager

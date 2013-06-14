@@ -39,7 +39,7 @@ namespace RampageXL
 
 		Player p;
 
-        Random rand;
+		Random rand;
 
 		public Game()
 			: base(Config.WindowWidth, Config.WindowHeight, Config.GraphicsMode, Config.Title)
@@ -55,10 +55,10 @@ namespace RampageXL
 			GestureFileName = "../../gestures.xml";
 			_gestureMap.LoadGesturesFromXml(GestureFileName);
 
-			sensor = KinectSensor.KinectSensors.FirstOrDefault(s => s.Status == KinectStatus.Connected);
-			sensor.SkeletonStream.Enable();
-			skeletons = new Skeleton[sensor.SkeletonStream.FrameSkeletonArrayLength];
-			sensor.Start();
+			//sensor = KinectSensor.KinectSensors.FirstOrDefault(s => s.Status == KinectStatus.Connected);
+			//sensor.SkeletonStream.Enable();
+			//skeletons = new Skeleton[sensor.SkeletonStream.FrameSkeletonArrayLength];
+			//sensor.Start();
 
 			// Instantiate the in memory representation of the gesture state for each player
 			_gestureMaps = new Dictionary<int, GestureMapState>();
@@ -71,24 +71,31 @@ namespace RampageXL
 			MugicConnection.Connect(Config.CalVRIP);
 			ImageManager.Init();
 
-			ImageManager.LoadImage(ImageName.player_standing_L00, "../../res/tex/player/george_standingL000.png");
-			ImageManager.LoadImage(ImageName.player_standing_R00, "../../res/tex/player/george_standingR000.png");
-			ImageManager.LoadImage(ImageName.player_walking_L00, "../../res/tex/player/george_walkL000.png");
-			ImageManager.LoadImage(ImageName.player_walking_L01, "../../res/tex/player/george_walkL001.png");
-			ImageManager.LoadImage(ImageName.player_walking_L02, "../../res/tex/player/george_walkL002.png");
-			ImageManager.LoadImage(ImageName.player_walking_R00, "../../res/tex/player/george_walkR000.png");
-			ImageManager.LoadImage(ImageName.player_walking_R01, "../../res/tex/player/george_walkR001.png");
-			ImageManager.LoadImage(ImageName.player_walking_R02, "../../res/tex/player/george_walkR002.png");
+			ImageManager.LoadImage(ImageName.player_standing_L00, "../../res/tex/player/BearL.png");
+			ImageManager.LoadImage(ImageName.player_standing_R00, "../../res/tex/player/BearR.png");
+			ImageManager.LoadImage(ImageName.player_walking_L00, "../../res/tex/player/Walk-L-1.png");
+			ImageManager.LoadImage(ImageName.player_walking_L01, "../../res/tex/player/Walk-L-2.png");
+			ImageManager.LoadImage(ImageName.player_walking_L02, "../../res/tex/player/Walk-L-3.png");
+			ImageManager.LoadImage(ImageName.player_walking_R00, "../../res/tex/player/Walk-R-1.png");
+			ImageManager.LoadImage(ImageName.player_walking_R01, "../../res/tex/player/Walk-R-2.png");
+			ImageManager.LoadImage(ImageName.player_walking_R02, "../../res/tex/player/Walk-R-3.png");
+			ImageManager.LoadImage(ImageName.player_attack_R01, "../../res/tex/player/Punch-R-1.png");
+			ImageManager.LoadImage(ImageName.player_attack_R02, "../../res/tex/player/Punch-R-2.png");
+			ImageManager.LoadImage(ImageName.player_attack_R03, "../../res/tex/player/Punch-R-3.png");
+			ImageManager.LoadImage(ImageName.player_attack_L01, "../../res/tex/player/Punch-L-1.png");
+			ImageManager.LoadImage(ImageName.player_attack_L02, "../../res/tex/player/Punch-L-2.png");
+			ImageManager.LoadImage(ImageName.player_attack_L03, "../../res/tex/player/Punch-L-3.png");
 
 
-			p = new Player(400, 300);
+
+			p = new Player(500, 300);
 
 			buildings = new List<Building>();
 
 			buildings.Add(new Building(new Vector2(90, 180), new Bounds(250, 300)));
 			buildings.Add(new Building(new Vector2(1000, 180), new Bounds(250, 300)));
 
-            rand = new Random();
+			rand = new Random();
 
 			XLG.Init();
 		}
@@ -99,7 +106,7 @@ namespace RampageXL
 
 			MugicObjectManager.SendShapes();
 
-			SkeletonEval();
+			//SkeletonEval();
 			p.Update();
 
 			//Collision checking
@@ -109,7 +116,7 @@ namespace RampageXL
 				b.Update();
 				if (b.isColliding(p))
 				{
-					Console.Write("\nLOOK OUT JC A COLLISION (with " + b.ToString() + ")!\n");
+					//Console.Write("\nLOOK OUT JC A COLLISION (with " + b.ToString() + ")!\n");
 				}
 				if (p.currentPunch != null && b.isColliding(p.currentPunch))
 				{
@@ -124,22 +131,7 @@ namespace RampageXL
 
 			foreach (Building b in buildingsToRemove)
 			{
-                float centerX = b.pos.X;
-                float leftX = centerX - b.rectangle.bounds.width - b.rectangle.bounds.width / 5.0f;
-                float rightX = centerX + b.rectangle.bounds.width + b.rectangle.bounds.width / 5.0f;
-
-                float tempX = (float)rand.Next((int)Config.WindowWidth - b.rectangle.bounds.width);
-                while (tempX < rightX && tempX > leftX)
-                {
-                    tempX = (float)rand.Next((int)Config.WindowWidth - b.rectangle.bounds.width);
-                }
-
-                int tempW = b.rectangle.bounds.width;
-                int tempH = b.rectangle.bounds.height;
-
 				buildings.Remove(b);
-
-                buildings.Add(new Building(new Vector2(tempX, 180), new Bounds(tempW, tempH)));
 			}
 		}
 
@@ -213,11 +205,11 @@ namespace RampageXL
 					}
 
 					SkeletonPoint sp = CalculateJointPosition(sd.Joints[JointType.HipCenter]);
-                    float newX = sp.X * 1.5f;
-                    if (newX < 0.0f)
-                        newX = 0.0f;
-                    else if (newX > Config.WindowWidth)
-                        newX = Config.WindowWidth;
+					float newX = sp.X * 1.5f;
+					if (newX < 0.0f)
+						newX = 0.0f;
+					else if (newX > Config.WindowWidth)
+						newX = Config.WindowWidth;
 					p.SetPosition(new Vector2(newX, p.pos.Y));
 
 					playerId = sd.TrackingId;
