@@ -14,8 +14,8 @@ namespace RampageXL.Shape
 {
 	class Rectangle : Drawable
 	{
-		private Bounds bounds;
-		private Vector3 position;
+		public Bounds bounds;
+		public Vector3 position;
 		private Color4 color;
 		private Image image;
 

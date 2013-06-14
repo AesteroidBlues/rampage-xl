@@ -17,9 +17,9 @@ namespace RampageXL.Entity
     /// </summary>
     abstract class GameObject
     {
-        protected Vector2     pos;
-        protected BoundingBox boundingBox;
-        protected Rectangle rectangle;
+        public Vector2     pos;
+        public BoundingBox boundingBox;
+        public Rectangle rectangle;
 
         public virtual bool isColliding(GameObject other)
         {

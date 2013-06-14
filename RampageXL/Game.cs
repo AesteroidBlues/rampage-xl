@@ -39,6 +39,8 @@ namespace RampageXL
 
 		Player p;
 
+        Random rand;
+
 		public Game()
 			: base(Config.WindowWidth, Config.WindowHeight, Config.GraphicsMode, Config.Title)
 		{
@@ -86,6 +88,8 @@ namespace RampageXL
 			buildings.Add(new Building(new Vector2(90, 180), new Bounds(250, 300)));
 			buildings.Add(new Building(new Vector2(1000, 180), new Bounds(250, 300)));
 
+            rand = new Random();
+
 			XLG.Init();
 		}
 
@@ -117,9 +121,25 @@ namespace RampageXL
 					}
 				}
 			}
+
 			foreach (Building b in buildingsToRemove)
 			{
+                float centerX = b.pos.X;
+                float leftX = centerX - b.rectangle.bounds.width - b.rectangle.bounds.width / 5.0f;
+                float rightX = centerX + b.rectangle.bounds.width + b.rectangle.bounds.width / 5.0f;
+
+                float tempX = (float)rand.Next((int)Config.WindowWidth - b.rectangle.bounds.width);
+                while (tempX < rightX && tempX > leftX)
+                {
+                    tempX = (float)rand.Next((int)Config.WindowWidth - b.rectangle.bounds.width);
+                }
+
+                int tempW = b.rectangle.bounds.width;
+                int tempH = b.rectangle.bounds.height;
+
 				buildings.Remove(b);
+
+                buildings.Add(new Building(new Vector2(tempX, 180), new Bounds(tempW, tempH)));
 			}
 		}
 
@@ -193,7 +213,12 @@ namespace RampageXL
 					}
 
 					SkeletonPoint sp = CalculateJointPosition(sd.Joints[JointType.HipCenter]);
-					p.SetPosition(new Vector2(sp.X, p.pos.Y));
+                    float newX = sp.X * 2.0f;
+                    if (newX < 0.0f)
+                        newX = 0.0f;
+                    else if (newX > Config.WindowWidth)
+                        newX = Config.WindowWidth;
+					p.SetPosition(new Vector2(newX, p.pos.Y));
 
 					playerId = sd.TrackingId;
 				}

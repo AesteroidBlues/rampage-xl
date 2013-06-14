@@ -142,12 +142,12 @@ namespace RampageXL.Entity
 
 		public void SetPosition(Vector2 newPos)
 		{
-			if (this.pos.X < newPos.X - 15)
+			if (this.pos.X < newPos.X - 25)
 			{
 				moveLeft = false;
 				moveRight = true;
 			}
-			else if (this.pos.X > newPos.X + 15)
+			else if (this.pos.X > newPos.X + 25)
 			{
 				moveRight = false;
 				moveLeft = true;
