@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 using OpenTK;
 using OpenTK.Graphics;
@@ -22,17 +23,17 @@ namespace RampageXL
 {
 	class Game : GameWindow
 	{
-        //KINECT VARS
-        public KinectSensor sensor;
-        public Skeleton[] skeletons;
-        public SkeletonFrame skeletonFrame;
+		//KINECT VARS
+		public KinectSensor sensor;
+		public Skeleton[] skeletons;
+		public SkeletonFrame skeletonFrame;
 
-        public GestureMap _gestureMap;
-        public Dictionary<int, GestureMapState> _gestureMaps;
-        public const string GestureFileName = "gestures.xml";
+		public GestureMap _gestureMap;
+		public Dictionary<int, GestureMapState> _gestureMaps;
+		public string GestureFileName;
 
-        public int playerId;
-        //END KINECT VARS
+		public int playerId;
+		//END KINECT VARS
 
 		List<Building> buildings;
 
@@ -46,19 +47,20 @@ namespace RampageXL
 
 		protected override void OnLoad(EventArgs e)
 		{
-            //KINECT LOAD
-            // First Load the XML File that contains the application configuration
-            _gestureMap = new GestureMap();
-            _gestureMap.LoadGesturesFromXml(GestureFileName);
+			//KINECT LOAD
+			// First Load the XML File that contains the application configuration
+			_gestureMap = new GestureMap();
+			GestureFileName = "../../gestures.xml";
+			_gestureMap.LoadGesturesFromXml(GestureFileName);
 
-            sensor = KinectSensor.KinectSensors.FirstOrDefault(s => s.Status == KinectStatus.Connected);
-            sensor.SkeletonStream.Enable();
-            skeletons = new Skeleton[sensor.SkeletonStream.FrameSkeletonArrayLength];
-            sensor.Start();
+			sensor = KinectSensor.KinectSensors.FirstOrDefault(s => s.Status == KinectStatus.Connected);
+			sensor.SkeletonStream.Enable();
+			skeletons = new Skeleton[sensor.SkeletonStream.FrameSkeletonArrayLength];
+			sensor.Start();
 
-            // Instantiate the in memory representation of the gesture state for each player
-            _gestureMaps = new Dictionary<int, GestureMapState>();
-            //END KINECT LOAD
+			// Instantiate the in memory representation of the gesture state for each player
+			_gestureMaps = new Dictionary<int, GestureMapState>();
+			//END KINECT LOAD
 
 			base.OnLoad(e);
 
@@ -93,7 +95,7 @@ namespace RampageXL
 
 			MugicObjectManager.SendShapes();
 
-            SkeletonEval();
+			SkeletonEval();
 			p.Update();
 
 			//Collision checking
@@ -143,77 +145,77 @@ namespace RampageXL
 			}
 		}
 
-        //KINECT METHODS
-        void SkeletonEval()
-        {
-            using (SkeletonFrame skeletonFrameData = sensor.SkeletonStream.OpenNextFrame(40))
-            {
-                if (skeletonFrameData == null)
-                {
-                    return;
-                }
+		//KINECT METHODS
+		void SkeletonEval()
+		{
+			using (SkeletonFrame skeletonFrameData = sensor.SkeletonStream.OpenNextFrame(40))
+			{
+				if (skeletonFrameData == null)
+				{
+					return;
+				}
 
-                var allSkeletons = new Skeleton[skeletonFrameData.SkeletonArrayLength];
-                skeletonFrameData.CopySkeletonDataTo(allSkeletons);
+				var allSkeletons = new Skeleton[skeletonFrameData.SkeletonArrayLength];
+				skeletonFrameData.CopySkeletonDataTo(allSkeletons);
 
-                foreach (Skeleton sd in allSkeletons)
-                {
-                    // If this skeleton is no longer being tracked, skip it
-                    if (sd.TrackingState != SkeletonTrackingState.Tracked)
-                    {
-                        continue;
-                    }
-
-                    // If there is not already a gesture state map for this skeleton, then create one
-                    if (!_gestureMaps.ContainsKey(sd.TrackingId))
-                    {
-                        var mapstate = new GestureMapState(_gestureMap);
-                        _gestureMaps.Add(sd.TrackingId, mapstate);
-                    }
-
-                    var keycode = _gestureMaps[sd.TrackingId].Evaluate(sd, false, Config.WindowWidth, Config.WindowHeight);
-
-                    if (keycode != VirtualKeyCode.NONAME)
+				foreach (Skeleton sd in allSkeletons)
+				{
+					// If this skeleton is no longer being tracked, skip it
+					if (sd.TrackingState != SkeletonTrackingState.Tracked)
 					{
-                        switch (keycode)
-                        {
-                        case VirtualKeyCode.RBUTTON:
-                            p.DoPunch(Direction.Right);
-                            break;
-                        case VirtualKeyCode.LBUTTON:
-                            p.DoPunch(Direction.Left);
-                            break;
-                         default:
-                            break;
-                        }
+						continue;
+					}
+
+					// If there is not already a gesture state map for this skeleton, then create one
+					if (!_gestureMaps.ContainsKey(sd.TrackingId))
+					{
+						var mapstate = new GestureMapState(_gestureMap);
+						_gestureMaps.Add(sd.TrackingId, mapstate);
+					}
+
+					var keycode = _gestureMaps[sd.TrackingId].Evaluate(sd, false, Config.WindowWidth, Config.WindowHeight);
+
+					if (keycode != VirtualKeyCode.NONAME)
+					{
+						switch (keycode)
+						{
+						case VirtualKeyCode.RBUTTON:
+							p.DoPunch(Direction.Right);
+							break;
+						case VirtualKeyCode.LBUTTON:
+							p.DoPunch(Direction.Left);
+							break;
+						 default:
+							break;
+						}
 
 						_gestureMaps[sd.TrackingId].ResetAll(sd);
 					}
 
-                    SkeletonPoint sp = CalculateJointPosition(sd.Joints[JointType.HipCenter]);
-                    p.SetPosition(new Vector2(sp.X, p.pos.Y));
+					SkeletonPoint sp = CalculateJointPosition(sd.Joints[JointType.HipCenter]);
+					p.SetPosition(new Vector2(sp.X, p.pos.Y));
 
-                    playerId = sd.TrackingId;
-                }
-            }
-        }
+					playerId = sd.TrackingId;
+				}
+			}
+		}
 
-        protected SkeletonPoint CalculateJointPosition(Joint joint)
-        {
-            var jointx = joint.Position.X;
-            var jointy = joint.Position.Y;
-            var jointz = joint.Position.Z;
+		protected SkeletonPoint CalculateJointPosition(Joint joint)
+		{
+			var jointx = joint.Position.X;
+			var jointy = joint.Position.Y;
+			var jointz = joint.Position.Z;
 
-            if (jointz < 1)
-                jointz = 1;
+			if (jointz < 1)
+				jointz = 1;
 
-            var jointnormx = jointx / (jointz * 1.1f);
-            var jointnormy = -(jointy / jointz * 1.1f);
-            var point = new SkeletonPoint();
-            point.X = (jointnormx + 0.5f) * Config.WindowWidth;
-            point.Y = (jointnormy + 0.5f) * Config.WindowHeight;
-            return point;
-        }
-        //END KINECT METHODS
+			var jointnormx = jointx / (jointz * 1.1f);
+			var jointnormy = -(jointy / jointz * 1.1f);
+			var point = new SkeletonPoint();
+			point.X = (jointnormx + 0.5f) * Config.WindowWidth;
+			point.Y = (jointnormy + 0.5f) * Config.WindowHeight;
+			return point;
+		}
+		//END KINECT METHODS
 	}
 }

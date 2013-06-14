@@ -14,11 +14,11 @@ using RampageXL.Timing;
 
 namespace RampageXL.Entity
 {
-    public enum Direction
-    {
-        Left,
-        Right
-    }
+	public enum Direction
+	{
+		Left,
+		Right
+	}
 
 	class Player : GameObject
 	{
@@ -114,47 +114,51 @@ namespace RampageXL.Entity
 			}
 		}
 
-        //KINECT CALLS
-        public void DoPunch(Direction dir)
-        {
-            switch (dir)
-            {
-                case Direction.Left: DoPunchLeft(); break;
-                case Direction.Right: DoPunchRight(); break;
-            }
-        }
+		//KINECT CALLS
+		public void DoPunch(Direction dir)
+		{
+			switch (dir)
+			{
+				case Direction.Left: DoPunchLeft(); break;
+				case Direction.Right: DoPunchRight(); break;
+			}
+		}
 
-        private void DoPunchLeft()
-        {
-            this.facing = 1;
-            this.punching = true;
-        }
+		private void DoPunchLeft()
+		{
+			this.facing = -1;
+			this.punching = true;
+			punchCooldown.startTimer();
+			punchLength.startTimer();
+		}
 
-        private void DoPunchRight()
-        {
-            this.facing = -1;
-            this.punching = true;
-        }
+		private void DoPunchRight()
+		{
+			this.facing = 1;
+			this.punching = true;
+			punchCooldown.startTimer();
+			punchLength.startTimer();
+		}
 
-        public void SetPosition(Vector2 newPos)
-        {
-            if (this.pos.X < newPos.X - 15)
-            {
-                moveLeft = false;
-                moveRight = true;
-            }
-            else if (this.pos.X > newPos.X + 15)
-            {
-                moveRight = false;
-                moveLeft = true;
-            }
-            else
-            {
-                moveLeft = false;
-                moveRight = false;
-            }
-        }
-        //END KINECT CALLS
+		public void SetPosition(Vector2 newPos)
+		{
+			if (this.pos.X < newPos.X - 15)
+			{
+				moveLeft = false;
+				moveRight = true;
+			}
+			else if (this.pos.X > newPos.X + 15)
+			{
+				moveRight = false;
+				moveLeft = true;
+			}
+			else
+			{
+				moveLeft = false;
+				moveRight = false;
+			}
+		}
+		//END KINECT CALLS
 
 		public override void Update()
 		{
