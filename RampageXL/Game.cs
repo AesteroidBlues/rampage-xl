@@ -213,7 +213,7 @@ namespace RampageXL
 					}
 
 					SkeletonPoint sp = CalculateJointPosition(sd.Joints[JointType.HipCenter]);
-                    float newX = sp.X * 2.0f;
+                    float newX = sp.X * 1.5f;
                     if (newX < 0.0f)
                         newX = 0.0f;
                     else if (newX > Config.WindowWidth)
